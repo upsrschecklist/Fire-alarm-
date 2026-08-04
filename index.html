@@ -94,49 +94,63 @@
         details > summary { list-style: none; font-weight: 600; }
         details > summary::-webkit-details-marker { display: none; }
 
-        /* KELAS KHUSUS PDF/PRINT */
-        .print-only { display: none !important; }
+        /* KELAS KHUSUS PDF/PRINT (DIPERKECIL AGAR MUAT BANYAK) */
+        .print-only, .print-table-container { display: none !important; }
 
         @media print {
-            /* Kurangi margin kertas A4 standar */
-            @page { margin: 1cm; size: A4 portrait; }
+            @page { margin: 0.5cm; size: A4 portrait; } /* Margin kertas sangat tipis */
             
-            body { background: white; padding: 0; color: black; font-size: 10px !important; }
-            .no-print { display: none !important; }
+            body { background: white; padding: 0; color: black; }
+            .no-print, .ui-table-container { display: none !important; }
             .print-only { display: flex !important; }
+            .print-table-container { display: block !important; margin-top: 5px; }
             
             .app-container { box-shadow: none; border: none; max-width: 100%; width: 100%; margin: 0; }
             
-            /* Header dipadatkan */
-            .app-header { background: #075E33 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 10px 15px !important; border-bottom: 2px solid #00A859 !important; }
-            .app-header h2 { font-size: 14px !important; margin-bottom: 2px !important; }
-            .app-header p { font-size: 10px !important; margin: 0 !important; }
+            /* Header Laporan Resmi - Dibuat Pipih */
+            .app-header { 
+                background: #075E33 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; 
+                padding: 6px 10px !important; border-bottom: 2px solid #00A859 !important; border-radius: 0 !important; margin-bottom: 10px !important;
+            }
+            .app-header h2 { font-size: 11px !important; margin-bottom: 2px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
+            .app-header p { font-size: 8px !important; margin: 0 !important; opacity: 0.9; }
             
-            .app-body { padding: 5px 0 !important; }
-            .history-section { margin-top: 5px !important; padding-top: 0 !important; border-top: none; }
+            .app-body { padding: 0 !important; }
+            .history-section { margin-top: 0 !important; padding-top: 0 !important; border-top: none; }
             
-            /* Tabel diperkecil font dan paddingnya */
-            table.styled-table th, table.styled-table td { padding: 6px 8px !important; font-size: 10px !important; line-height: 1.3 !important; }
-            table.styled-table th { background-color: #E2E8F0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 11px !important; padding: 6px 8px !important; }
+            #printMonthHeader { font-size: 10px !important; margin-bottom: 6px !important; padding-bottom: 4px !important; border-bottom: 1px solid #00A859 !important; }
+
+            /* Tampilan Tabel Resmi - Padding & Teks Dikecilkan Drastis */
+            table.styled-table { border-collapse: collapse !important; width: 100% !important; border: 1px solid #CBD5E1 !important;}
+            table.styled-table th, table.styled-table td { 
+                padding: 4px 6px !important; font-size: 9px !important; line-height: 1.2 !important; border: 1px solid #CBD5E1 !important;
+            }
+            table.styled-table th { 
+                background-color: #E2E8F0 !important; color: #1E293B !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; 
+                font-size: 9px !important; text-transform: uppercase; text-align: center !important; padding: 6px !important;
+            }
             
-            /* CSS Override untuk style inline Javascript agar hemat tempat di PDF */
-            td div[style*="padding: 10px 14px"] { padding: 4px 8px !important; } /* Kotak Header Kendala/Perbaikan */
-            td div[style*="padding: 14px"] { padding: 6px 8px !important; } /* Kotak Isi Kendala */
-            td div[style*="margin-bottom: 12px"] { margin-bottom: 6px !important; } /* Jarak antar kotak lantai */
-            td div[style*="margin-top: 12px"] { margin-top: 6px !important; } /* Jarak di kolom Info Harian */
-            td div[style*="margin-bottom: 10px"] { margin-bottom: 5px !important; padding-bottom: 5px !important; } 
+            /* Override Styles via Class (Agar lebih rapat di PDF) */
+            .panel-badge { padding: 2px 4px !important; font-size: 7px !important; margin-bottom: 4px !important; border-width: 1px !important; }
+            .info-label { margin-top: 4px !important; font-size: 8px !important; margin-bottom: 0 !important; }
+            .info-val { font-size: 9px !important; margin-bottom: 2px !important; }
             
-            td strong { font-size: 11px !important; }
-            td span { font-size: 10px !important; }
+            .aman-box { padding: 4px !important; margin: 0 !important; }
+            .aman-box span { font-size: 9px !important; }
             
-            /* Badges diperkecil */
-            .panel-badge { padding: 2px 4px !important; font-size: 9px !important; margin-bottom: 4px !important; }
+            .kendala-item { margin-bottom: 4px !important; }
+            .kendala-header { padding: 4px 6px !important; }
+            .kendala-body { padding: 4px 6px !important; }
+            .kendala-body span { font-size: 9px !important; }
+
+            /* Box Lantai AMAN Tampilan Expand */
+            .print-only div[style*="padding: 4px 8px"], td span[style*="display:inline-block"] { 
+                padding: 2px 4px !important; margin: 1px !important; font-size: 8px !important; border: 1px solid #CBD5E1 !important; 
+                background-color: #F8FAFC !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; 
+            }
             
-            /* Box Lantai AMAN diperkecil dan dirapatkan */
-            .print-only div[style*="padding: 4px 8px"], td span[style*="display:inline-block"] { padding: 2px 4px !important; margin: 1px 2px !important; font-size: 9px !important; line-height: 1.1 !important; }
-            
-            /* Thumbnails gambar diperkecil drastis */
-            img.thumb { width: 35px !important; height: 35px !important; border-radius: 4px !important; border: 1px solid #CBD5E1 !important; }
+            /* Thumbnail Foto dikecilkan lagi */
+            img.thumb { width: 32px !important; height: 32px !important; border-radius: 4px !important; border: 1px solid #94A3B8 !important; }
         }
 
         @media (max-width: 600px) { .kendala-grid, .photo-upload-grid { grid-template-columns: 1fr; } }
@@ -208,29 +222,50 @@
         </div>
 
         <div class="history-section">
-            <div class="history-header">
+            <div class="history-header no-print">
                 <div class="section-title" style="margin:0;">Riwayat & Log Pengecekan</div>
-                <div class="filter-controls no-print">
+                <div class="filter-controls">
                     <button class="btn-refresh" onclick="fetchDataFromSheets()">🔄 Muat Data Server</button>
                     <input type="month" id="filterBulan" onchange="renderHistoryTable()" style="width: auto;">
                     <button class="btn-pdf" onclick="window.print()">📥 Cetak PDF / Print</button>
                 </div>
             </div>
 
-            <div class="table-responsive">
+            <!-- WADAH TABEL KHUSUS TAMPILAN LAYAR (TERBARU DI ATAS) -->
+            <div class="table-responsive ui-table-container">
                 <table class="styled-table">
                     <thead>
                         <tr>
                             <th style="width: 25%;">Info Harian</th>
                             <th style="width: 60%;">Lokasi & Status Pengecekan</th>
-                            <th style="width: 15%; text-align:center;">Foto</th>
+                            <th style="width: 15%;">Foto</th>
                         </tr>
                     </thead>
-                    <tbody id="historyTableBody">
+                    <tbody id="historyTableBodyUI">
                         <tr><td colspan="3" style="text-align:center; padding:30px;">Memuat data...</td></tr>
                     </tbody>
                 </table>
             </div>
+
+            <!-- WADAH TABEL KHUSUS CETAK PDF (TERKECIL/TERLAMA DI ATAS) -->
+            <div class="table-responsive print-table-container">
+                <div id="printMonthHeader" style="text-align: center; font-size: 13px; font-weight: 700; margin-bottom: 15px; color: #075E33; text-transform: uppercase; border-bottom: 2px solid #00A859; padding-bottom: 8px; display: inline-block; width: 100%;">
+                    <!-- Judul bulan akan dirender lewat JS di sini -->
+                </div>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Info Harian</th>
+                            <th style="width: 60%;">Lokasi & Status Pengecekan</th>
+                            <th style="width: 15%;">Foto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBodyPrint">
+                        <tr><td colspan="3" style="text-align:center; padding:30px;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -241,6 +276,7 @@
 </div>
 
 <script>
+    // PAStikan link App Script ini valid milik Anda
     const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzWFTR45zhxcnhKJwdWrzPdveafvuVpKPhJKGwzoELqMmAoRPHGrFFp52Bp5sMj2FaQ8w/exec"; 
 
     const rsData = {
@@ -317,6 +353,19 @@
             }
         } catch(e) {}
         return rawStr.replace('T', ' ').replace(/\.\d{3}Z?$/, '').replace('Z', '');
+    }
+
+    function formatTanggalOnly(waktuAsli) {
+        try {
+            const d = new Date(waktuAsli.includes('T') ? waktuAsli : waktuAsli.replace(' ', 'T'));
+            if (!isNaN(d.getTime())) {
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                return `${dd}-${mm}-${yyyy}`;
+            }
+        } catch(e) {}
+        return waktuAsli.split(' ')[0];
     }
 
     function renderFloorForm() {
@@ -417,6 +466,7 @@
     function calculatePendingIssuesFromServer() {
         let issueState = {};
 
+        // Pengurutan Ascending agar log dibaca sesuai kronologi waktu
         let sortedHistory = [...reportHistory].sort((a, b) => {
             let dateA = new Date(a.waktu.includes('T') ? a.waktu : a.waktu.replace(' ', 'T'));
             let dateB = new Date(b.waktu.includes('T') ? b.waktu : b.waktu.replace(' ', 'T'));
@@ -549,7 +599,6 @@
         renderPendingAlerts();
 
         const logText = `[LOG BYPASS]|${pendingIssues[index].locKey}|${pendingIssues[index].note}|${catatan}|${waktuLokal}`;
-
         submitDataToServer({ waktu: waktuLokal, petugas: nama, panel: "On Standby", laporan: logText, foto: "" }, "Tindakan Bypass dicatat!");
     }
 
@@ -572,7 +621,9 @@
 
     function fetchDataFromSheets() {
         if (!navigator.onLine || GOOGLE_SHEET_API_URL === "") {
-            document.getElementById('historyTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center;">Tidak ada internet.</td></tr>`;
+            const noIntHtml = `<tr><td colspan="3" style="text-align:center;">Tidak ada internet.</td></tr>`;
+            document.getElementById('historyTableBodyUI').innerHTML = noIntHtml;
+            document.getElementById('historyTableBodyPrint').innerHTML = noIntHtml;
             return;
         }
 
@@ -597,37 +648,38 @@
             });
     }
 
-    function formatTanggalOnly(waktuAsli) {
-        try {
-            const d = new Date(waktuAsli.includes('T') ? waktuAsli : waktuAsli.replace(' ', 'T'));
-            if (!isNaN(d.getTime())) {
-                const yyyy = d.getFullYear();
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                return `${dd}-${mm}-${yyyy}`;
-            }
-        } catch(e) {}
-        return waktuAsli.split(' ')[0];
-    }
-
     function renderHistoryTable() {
-        const tbody = document.getElementById('historyTableBody');
+        const tbodyUI = document.getElementById('historyTableBodyUI');
+        const tbodyPrint = document.getElementById('historyTableBodyPrint');
         const filterBulan = document.getElementById('filterBulan').value; 
-        tbody.innerHTML = '';
+        
+        // Atur teks Header Bulan untuk PDF
+        let txtBulan = "";
+        if(filterBulan) {
+            const [y, m] = filterBulan.split('-');
+            const dateObj = new Date(y, parseInt(m)-1, 1);
+            txtBulan = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+        } else {
+            txtBulan = "Semua Periode";
+        }
+        document.getElementById('printMonthHeader').innerText = `PERIODE LAPORAN: ${txtBulan}`;
 
         let filteredHistory = reportHistory.filter(item => {
             if (!item.waktu) return false;
             return item.waktu.startsWith(filterBulan) || item.waktu.includes(filterBulan.split('-').reverse().join('/')); 
         });
 
+        // Selalu urutkan dari TANGGAL TERKECIL ke TERBESAR untuk acuan dasar (Ascending)
         filteredHistory.sort((a, b) => {
             let dateA = new Date(a.waktu.includes('T') ? a.waktu : a.waktu.replace(' ', 'T'));
             let dateB = new Date(b.waktu.includes('T') ? b.waktu : b.waktu.replace(' ', 'T'));
-            return dateB - dateA;
+            return dateA - dateB; 
         });
 
         if (filteredHistory.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px;">Belum ada data di bulan ini.</td></tr>`;
+            const emptyHtml = `<tr><td colspan="3" style="text-align:center; padding:30px;">Belum ada data di bulan ini.</td></tr>`;
+            tbodyUI.innerHTML = emptyHtml;
+            tbodyPrint.innerHTML = emptyHtml;
             return;
         }
 
@@ -683,7 +735,6 @@
             
             let group = groupedByDay[dateKey];
             
-            // Perbaikan Zona Waktu UTC ke WIB agar jam tampil sesuai perangkat
             let waktuLokal = formatDateTimeClean(item.waktu);
             let timeMatch = waktuLokal.match(/\d{2}:\d{2}/);
             if (timeMatch) group.times.add(timeMatch[0]);
@@ -724,6 +775,8 @@
              toRemove.forEach(txt => group.amanList.delete(txt));
         });
 
+        let rowsHtmlArray = []; // Simpan tiap baris HTML ke dalam array berdasarkan hari (Ascending)
+
         dayOrder.forEach(dateKey => {
             let group = groupedByDay[dateKey];
             let displayDate = dateKey; 
@@ -745,12 +798,12 @@
 
                     if (repair) {
                         kendalaBlocks += `
-                        <div style="margin-bottom: 12px; border: 1px solid #10B981; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                            <div style="background: #ECFDF5; padding: 10px 14px; border-bottom: 1px solid #A7F3D0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <div class="kendala-item" style="border: 1px solid #10B981; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                            <div class="kendala-header" style="background: #ECFDF5; border-bottom: 1px solid #A7F3D0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                                 <strong style="color: #065F46; font-size: 14px;">📍 ${kData.floor}</strong>
                                 <span style="font-size: 11px; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #A7F3D0; color: #065F46; font-weight: 600;">${kData.zoneRoom}</span>
                             </div>
-                            <div style="padding: 14px; background: white;">
+                            <div class="kendala-body" style="background: white;">
                                 <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #E2E8F0;">
                                     <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ Kendala Awal:</span><br>
                                     <span style="color: #7F1D1D; font-size: 13px; text-decoration: line-through;">${kData.issueNote}</span>
@@ -759,41 +812,41 @@
                                     <span style="color: #10B981; font-size: 11px; font-weight: 700; text-transform: uppercase;">✔️ Diperbaiki:</span><br>
                                     <span style="color: #065F46; font-size: 14px; font-weight: 600;">${repair.perbaikan}</span>
                                     <div style="margin-top: 8px; font-size: 11px; color: #64748B; background: #F8FAFC; display: inline-block; padding: 4px 8px; border-radius: 4px; border: 1px solid #E2E8F0;">
-                                        Perbaikan tuntas oleh <strong style="color: #0F172A;">${repair.petugas}</strong> pada <strong>${repair.waktu}</strong>
+                                        Oleh <strong style="color: #0F172A;">${repair.petugas}</strong> (${repair.waktu})
                                     </div>
                                 </div>
                             </div>
                         </div>`;
                     } else if (bypass) {
                         kendalaBlocks += `
-                        <div style="margin-bottom: 12px; border: 1px solid #F59E0B; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                            <div style="background: #FEF3C7; padding: 10px 14px; border-bottom: 1px solid #FDE68A; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <div class="kendala-item" style="border: 1px solid #F59E0B; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                            <div class="kendala-header" style="background: #FEF3C7; border-bottom: 1px solid #FDE68A; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                                 <strong style="color: #92400E; font-size: 14px;">📍 ${kData.floor}</strong>
                                 <span style="font-size: 11px; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #FDE68A; color: #92400E; font-weight: 600;">${kData.zoneRoom}</span>
                             </div>
-                            <div style="padding: 14px; background: white;">
+                            <div class="kendala-body" style="background: white;">
                                 <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #E2E8F0;">
-                                    <span style="color: #D97706; font-size: 11px; font-weight: 700; text-transform: uppercase;">🔧 TINDAKAN BYPASS:</span><br>
-                                    <span style="color: #92400E; font-size: 14px; font-weight: 600;">${bypass.bypass}</span>
-                                    <div style="margin-top: 8px; font-size: 11px; color: #64748B; background: #F8FAFC; display: inline-block; padding: 4px 8px; border-radius: 4px; border: 1px solid #E2E8F0;">
-                                        Diakali oleh <strong style="color: #0F172A;">${bypass.petugas}</strong> pada <strong>${bypass.waktu}</strong>
+                                    <span style="color: #D97706; font-size: 11px; font-weight: 700; text-transform: uppercase;">🔧 BYPASS:</span><br>
+                                    <span style="color: #92400E; font-size: 13px; font-weight: 600;">${bypass.bypass}</span>
+                                    <div style="margin-top: 4px; font-size: 10px; color: #64748B;">
+                                        Diakali oleh <strong>${bypass.petugas}</strong> (${bypass.waktu})
                                     </div>
                                 </div>
                                 <div>
-                                    <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ Kendala Awal:</span><br>
-                                    <span style="color: #EF4444; font-size: 13px;">${kData.issueNote}</span>
+                                    <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ Awal:</span><br>
+                                    <span style="color: #EF4444; font-size: 12px;">${kData.issueNote}</span>
                                 </div>
                             </div>
                         </div>`;
                     } else {
                         kendalaBlocks += `
-                        <div style="margin-bottom: 12px; border: 1px solid #EF4444; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                            <div style="background: #FEF2F2; padding: 10px 14px; border-bottom: 1px solid #FECACA; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <div class="kendala-item" style="border: 1px solid #EF4444; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                            <div class="kendala-header" style="background: #FEF2F2; border-bottom: 1px solid #FECACA; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                                 <strong style="color: #991B1B; font-size: 14px;">📍 ${kData.floor}</strong>
                                 <span style="font-size: 11px; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #FECACA; color: #991B1B; font-weight: 600;">${kData.zoneRoom}</span>
                             </div>
-                            <div style="padding: 14px; background: white;">
-                                <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ DETAIL KENDALA:</span><br>
+                            <div class="kendala-body" style="background: white;">
+                                <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ KENDALA:</span><br>
                                 <span style="color: #7F1D1D; font-size: 13px; font-weight: 600;">${kData.issueNote}</span>
                             </div>
                         </div>`;
@@ -804,10 +857,8 @@
                     amanBlocksHtml += `<span style="display:inline-block; margin: 3px; padding: 4px 8px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 4px; font-size: 11px; color: #64748B;">${amanText}</span>`;
                 });
 
-                // PERBAIKAN: Pisahkan elemen untuk Layar dan untuk Print/PDF
                 parsedHtml = kendalaBlocks + `
-                <div style="margin-top: 16px;">
-                    <!-- Elemen khusus untuk Layar (Bisa di klik dan di hidden) -->
+                <div style="margin-top: 8px;">
                     <details class="no-print">
                         <summary style="font-size: 12px; color: #00A859; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: var(--brand-light); border-radius: 4px;">
                             👁️ Tampilkan Lantai Lain Yang Aman
@@ -815,44 +866,51 @@
                         <div style="margin-top: 10px; display: flex; flex-wrap: wrap;">${amanBlocksHtml}</div>
                     </details>
                     
-                    <!-- Elemen khusus untuk Cetak/PDF (Langsung terbuka) -->
-                    <div class="print-only" style="margin-top: 8px; flex-wrap: wrap; gap: 4px;">
-                        <div style="width: 100%; font-size: 11px; font-weight: 700; color: #075E33; margin-bottom: 4px;">✔️ Lantai Terpantau Aman:</div>
+                    <div class="print-only" style="flex-wrap: wrap; gap: 4px;">
+                        <div style="width: 100%; font-size: 10px; font-weight: 700; color: #075E33; margin-bottom: 2px;">✔️ Lantai Lain Aman:</div>
                         ${amanBlocksHtml}
                     </div>
                 </div>`;
             } else {
                 parsedHtml = `
-                <div style="background: #ECFDF5; border: 1px solid #A7F3D0; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--shadow-sm);">
-                    <span style="color: #059669; font-weight: 600; font-size: 14px;">✔️ Seluruh Pengecekan Hari Ini Terpantau AMAN</span>
+                <div class="aman-box" style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 6px; text-align: center; padding: 12px; box-shadow: var(--shadow-sm);">
+                    <span style="color: #059669; font-weight: 600; font-size: 13px;">✔️ Seluruh Pengecekan Terpantau AMAN</span>
                 </div>`;
             }
 
             let fotoHtml = '<span style="color:var(--text-muted); font-size:12px;">-</span>';
             if (group.photos.length > 0) {
-                fotoHtml = `<div style="display:flex; flex-direction:column; gap:8px;">` + 
+                fotoHtml = `<div style="display:flex; flex-direction:column; gap:4px; align-items:center;">` + 
                            group.photos.map(src => `<img src="${src}" class="thumb" onclick="openPhotoModal('${src}')">`).join('') + 
                            `</div>`;
             }
 
-            tbody.innerHTML += `
+            let rowHtml = `
                 <tr>
-                    <td style="background: #F8FAFC; border-right: 1px solid var(--border-color);">
+                    <td style="background: #F8FAFC; border-right: 1px solid var(--border-color); vertical-align: middle;">
                         ${badgeHtml}
-                        <div style="margin-top: 12px; font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">TANGGAL:</div>
-                        <div style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">${displayDate}</div>
-                        <div style="font-size: 11px; font-weight: 600; color: var(--warning); margin-bottom: 12px;">🕒 Jam: ${jamText}</div>
-                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">PETUGAS:</div>
-                        <div style="font-size: 12px; font-weight: 700; color: var(--brand-green);">👤 ${petugasText}</div>
+                        <div class="info-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 8px;">TANGGAL:</div>
+                        <div class="info-val" style="font-size: 14px; font-weight: 700; color: var(--text-main);">${displayDate}</div>
+                        <div class="info-val" style="font-size: 11px; font-weight: 600; color: var(--warning); margin-bottom: 8px;">🕒 Jam: ${jamText}</div>
+                        <div class="info-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">PETUGAS:</div>
+                        <div class="info-val" style="font-size: 12px; font-weight: 700; color: var(--brand-green);">👤 ${petugasText}</div>
                     </td>
-                    <td style="padding: 16px; background: #FAFAFA;">
+                    <td style="background: #FAFAFA;">
                         ${parsedHtml}
                     </td>
-                    <td style="text-align:center; vertical-align: top; padding-top: 16px;">
+                    <td style="text-align:center; vertical-align: middle;">
                         ${fotoHtml}
                     </td>
                 </tr>`;
+            
+            rowsHtmlArray.push(rowHtml);
         });
+
+        // MASUKKAN DATA KE WADAH CETAK (Urutan Ascending / dari kecil ke besar)
+        tbodyPrint.innerHTML = rowsHtmlArray.join('');
+
+        // MASUKKAN DATA KE WADAH TAMPILAN LAYAR (Di-reverse agar terbaru di atas / Descending)
+        tbodyUI.innerHTML = [...rowsHtmlArray].reverse().join('');
     }
 
     function openPhotoModal(src) {
@@ -900,38 +958,36 @@
                 if (statusVal === "Kendala") {
                     const zVal = document.getElementById(`zone_select_${idx}`).value;
                     const rVal = document.getElementById(`room_select_${idx}`).value;
-                    const noteVal = document.getElementById(`ket_text_${idx}`).value;
-
-                    if (!zVal || !rVal) { alert(`Harap lengkapi Zona dan Ruangan pada ${floor}!`); throw new Error("Stop"); }
-
-                    stringForGoogleSheet += `• ${floor}: ${zVal} (${rVal}) - [KENDALA] ${noteVal}\n`;
+                    const kVal = document.getElementById(`ket_text_${idx}`).value;
+                    if (zVal && rVal && kVal) {
+                        stringForGoogleSheet += `• ${floor}: ${zVal} (${rVal}) - [KENDALA] ${kVal}\n`;
+                    }
                 } else {
                     stringForGoogleSheet += `• ${floor}: AMAN\n`;
                 }
             });
-        } catch (error) { return; }
 
-        const payload = { 
-            waktu: waktuVal, 
-            petugas: petugasVal,
-            panel: panelVal,
-            laporan: stringForGoogleSheet,
-            foto: currentPhotoBase64 
-        };
+            const payload = {
+                waktu: waktuVal, petugas: petugasVal, panel: panelVal, laporan: stringForGoogleSheet.trim(), foto: currentPhotoBase64
+            };
 
-        e.target.reset();
-        setDefaultTime();
-        currentPhotoBase64 = "";
-        document.getElementById('infoKamera').innerText = "Belum ada foto";
-        document.getElementById('infoGaleri').innerText = "Belum ada foto";
-        renderFloorForm();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        submitDataToServer(payload, "✔️ Laporan berhasil disimpan!");
+            submitDataToServer(payload, "Laporan berhasil disimpan ke database Google Sheets!");
+            
+            document.getElementById('inspectionForm').reset();
+            setDefaultTime();
+            renderFloorForm();
+            currentPhotoBase64 = "";
+            document.getElementById('infoKamera').innerText = "Belum ada foto";
+            document.getElementById('infoGaleri').innerText = "Belum ada foto";
+        } catch (error) {
+            console.error(error);
+            alert("Terjadi kesalahan sistem saat memproses form.");
+        }
     });
 
     renderFloorForm();
-    setTimeout(fetchDataFromSheets, 1000); 
+    fetchDataFromSheets();
+
 </script>
 </body>
 </html>
