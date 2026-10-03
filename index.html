@@ -3,271 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Fire Alarm - RS Hermina Solo Gedung Baru</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Laporan Fire Alarm - RS Hermina Solo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --brand-green: #00A859; --brand-dark: #075E33; --brand-light: #E6F6EC; --bg-body: #F4F7F6;
-            --card-bg: #FFFFFF; --text-main: #1E293B; --text-muted: #64748B; --border-color: #E2E8F0;
-            --success: #10B981; --success-bg: #ECFDF5; --danger: #EF4444; --danger-bg: #FEF2F2;
-            --warning: #F59E0B; --warning-bg: #FFFBEB;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --radius-md: 8px; --radius-lg: 12px;
+            /* TEMA PANEL ELEGAN (BASED ON REAL PHOTO) */
+            --casing-bg: #F0F0F0;       /* Warna tembok / casing luar */
+            --panel-slate: #3B5B88;     /* Biru kalem elegan */
+            --panel-border: #2A4365;
+            --lcd-bg: #E2EFF7;          /* Biru pucat LCD */
+            --lcd-border: #9CB4CC;
+            
+            --btn-idle: #1E293B;
+            --led-green: #10B981;
+            --led-red: #EF4444;
+            --led-blue: #3B82F6;
+            
+            --text-light: #F8FAFC;
+            --radius-md: 6px;
+            --radius-sm: 4px;
         }
 
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px; line-height: 1.5; }
-        .app-container { max-width: 900px; margin: 0 auto; background: var(--card-bg); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #E5E7EB; margin: 0; padding: 20px; line-height: 1.5; display: flex; justify-content: center; }
         
-        /* HEADER UTAMA */
-        .app-header { background: #075E33; color: white; padding: 30px 20px; text-align: center; border-bottom: 4px solid #00A859; }
-        .app-header h2 { margin: 0 0 8px 0; font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
-        .app-header p { margin: 0; font-size: 13px; opacity: 0.95; }
-        
-        .app-body { padding: 30px; }
-        
-        .server-status-container { text-align: center; margin-bottom: 25px; margin-top: -10px; }
-        .server-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; background: var(--brand-light); color: var(--brand-dark); border: 1px solid rgba(0, 168, 89, 0.3); }
-        .status-offline { background: var(--warning-bg); color: #92400E; border-color: #FDE68A; }
+        /* CASING LUAR */
+        .app-container { 
+            width: 100%; max-width: 900px; 
+            background: var(--casing-bg); 
+            border-radius: 8px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15), inset 0 1px 2px rgba(255,255,255,0.8); 
+            padding: 20px;
+        }
 
-        .section-title { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .section-title::before { content: ''; display: block; width: 4px; height: 16px; background-color: var(--brand-green); border-radius: 4px; }
+        /* PLAT STIKER EMAS */
+        .panel-sticker {
+            background: #111; color: #FACC15; 
+            border: 1px solid #444; border-radius: 2px;
+            padding: 6px 16px; margin: 0 auto 16px auto;
+            width: fit-content; text-align: center;
+            font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* FACEPLATE BIRU SLATE */
+        .hooseki-faceplate {
+            background-color: var(--panel-slate);
+            /* Garis horizontal sangat samar */
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.03) 3px, rgba(255,255,255,0.03) 6px);
+            border: 2px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.15);
+            color: var(--text-light);
+        }
         
-        .pending-alert-box { background: var(--warning-bg); border-left: 4px solid var(--warning); padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px; box-shadow: var(--shadow-sm); }
-        .pending-alert-box h4 { margin: 0 0 12px 0; color: #92400E; font-size: 14px; }
-        .pending-item { background: white; padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #FDE68A; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        /* LAYAR LCD */
+        .app-header { 
+            background: var(--lcd-bg); 
+            color: #0F172A; 
+            padding: 16px; 
+            text-align: center; 
+            border: 3px solid var(--lcd-border); 
+            border-radius: 4px;
+            margin-bottom: 24px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .app-header h2 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; font-family: 'Share Tech Mono', monospace; letter-spacing: 0.5px; }
+        .app-header p { margin: 0; font-size: 12px; font-weight: 600; color: #334155; }
         
-        .form-group { margin-bottom: 24px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13px; }
-        input[type="datetime-local"], input[type="month"], select, input[type="text"] { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 14px; font-family: inherit; background: #F8FAFC; }
+        .server-status-container { text-align: center; margin-bottom: 20px; }
+        .server-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); }
+        .status-online { color: #34D399; }
+        .status-offline { color: #F87171; }
+
+        /* TAB GEDUNG (Desain Tombol Elegan) */
+        .building-toggle { display: flex; gap: 12px; margin-bottom: 24px; }
+        .building-toggle button { 
+            flex: 1; padding: 12px; 
+            background: #E2E8F0; color: #475569; 
+            border: 1px solid #94A3B8; border-bottom: 4px solid #94A3B8; 
+            border-radius: var(--radius-sm); font-weight: 700; font-size: 13px; cursor: pointer; text-transform: uppercase; transition: all 0.1s;
+        }
+        .building-toggle button.active { 
+            background: var(--led-blue); color: white; 
+            border-color: #2563EB; border-bottom: 1px solid #2563EB; 
+            transform: translateY(3px); box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+        }
+
+        .section-title { font-size: 12px; font-weight: 600; color: #93C5FD; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; }
         
-        .floor-card { background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
-        .floor-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .floor-name { font-size: 16px; font-weight: 700; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 12px; color: #E2E8F0; letter-spacing: 0.5px; }
         
-        .status-toggle { display: inline-flex; background: #E2E8F0; padding: 4px; border-radius: 8px; gap: 4px; }
+        /* INPUT FORM */
+        input[type="datetime-local"], input[type="month"], select, input[type="text"] { 
+            width: 100%; padding: 10px 12px; 
+            border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); 
+            font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.9); color: #0F172A;
+            transition: 0.2s;
+        }
+        input:focus, select:focus { outline: none; border-color: #93C5FD; background: #FFF; }
+        
+        /* CARD LANTAI (Transparan Halus) */
+        .floor-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: var(--radius-md); padding: 14px; margin-bottom: 10px; 
+        }
+        .floor-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .floor-name { font-size: 13px; font-weight: 600; color: #F1F5F9; letter-spacing: 0.5px; }
+        
+        /* TOMBOL TOGGLE (Tactile) */
+        .status-toggle { display: inline-flex; gap: 8px; }
         .status-toggle.full-width { display: flex; width: 100%; }
         .status-toggle label { margin: 0; flex: 1; text-align: center; }
-        .status-toggle span { display: block; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; user-select: none; transition: 0.2s; }
+        .status-toggle span { display: block; padding: 8px 12px; background: var(--btn-idle); border: 1px solid #0F172A; border-bottom: 3px solid #0F172A; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: #94A3B8; cursor: pointer; user-select: none; transition: 0.1s; text-transform: uppercase; }
         .status-toggle input { display: none; }
-        .toggle-aman input:checked + span { background: var(--success); color: white; box-shadow: var(--shadow-sm); }
-        .toggle-kendala input:checked + span { background: var(--danger); color: white; box-shadow: var(--shadow-sm); }
         
-        .kendala-input-area { margin-top: 16px; background: var(--danger-bg); border: 1px solid #FECACA; padding: 16px; border-radius: var(--radius-md); display: none; }
-        .kendala-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        /* Efek ditekan (masuk ke dalam) & Menyala */
+        .toggle-aman input:checked + span { background: #059669; color: white; border-color: #047857; border-bottom: 1px solid #047857; transform: translateY(2px); box-shadow: 0 0 12px rgba(16,185,129,0.3); }
+        .toggle-kendala input:checked + span { background: #DC2626; color: white; border-color: #B91C1C; border-bottom: 1px solid #B91C1C; transform: translateY(2px); box-shadow: 0 0 12px rgba(239,68,68,0.3); }
         
-        .photo-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
-        .photo-box { border: 2px dashed #CBD5E1; padding: 20px 10px; border-radius: var(--radius-md); text-align: center; background: #F8FAFC; cursor: pointer; transition: 0.2s; }
-        .photo-box:hover { border-color: var(--brand-green); background: var(--brand-light); }
-        .photo-box label { cursor: pointer; color: var(--brand-green); font-weight: 600; font-size: 13px; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .photo-box label i { font-size: 26px; font-style: normal; }
+        .kendala-input-area, .panel-note-area { margin-top: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 12px; border-radius: var(--radius-sm); display: none; }
+        .kendala-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        
+        /* UPLOAD AREA */
+        .photo-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .photo-box { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.3); padding: 16px 10px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: 0.2s; }
+        .photo-box:hover { border-color: #93C5FD; background: rgba(255,255,255,0.1); }
+        .photo-box label { cursor: pointer; color: #E2E8F0; font-weight: 500; font-size: 11px; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .photo-box label i { font-size: 20px; font-style: normal; opacity: 0.8; }
         .photo-box input { display: none; }
-        .file-info { font-size: 11px; color: var(--text-muted); margin-top: 8px; word-break: break-all; }
+        .file-info { font-size: 10px; color: #94A3B8; margin-top: 6px; word-break: break-all; }
         
-        .btn-submit { background: var(--brand-green); color: white; border: none; width: 100%; padding: 16px; border-radius: var(--radius-md); font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 32px; transition: 0.2s; }
-        .btn-submit:hover { background: #008f4c; }
-        .btn-resolve, .btn-pdf, .btn-refresh { font-size: 12px; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-resolve { background: var(--success); color: white; border: none; }
-        .btn-pdf { background: #075E33; border: 1px solid #075E33; color: white; }
-        .btn-refresh { background: var(--brand-light); border: 1px solid var(--brand-green); color: var(--brand-dark); }
+        /* TOMBOL SIMPAN */
+        .btn-submit { background: var(--lcd-bg); color: #0F172A; border: 1px solid var(--lcd-border); border-bottom: 3px solid var(--lcd-border); width: 100%; padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 24px; transition: 0.1s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-submit:active { transform: translateY(2px); border-bottom-width: 1px; background: #CFE3F1; }
+
+        /* KERTAS STRUK LOG */
+        .paper-log { 
+            margin-top: 20px; background: #FFFFFF; color: #1E293B; border-radius: 4px; padding: 24px; 
+            border: 1px solid #CBD5E1; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative;
+        }
         
-        .history-section { margin-top: 48px; border-top: 1px solid var(--border-color); padding-top: 32px; }
-        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-        .filter-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; }
+        .history-title { font-size: 14px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .table-responsive { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: white; }
+        .btn-pdf { font-size: 11px; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; background: #F1F5F9; border: 1px solid #CBD5E1; color: #334155; text-transform: uppercase; transition: 0.2s; }
+        .btn-pdf:hover { background: #E2E8F0; }
+        .btn-resolve { font-size: 10px; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: 600; background: var(--led-green); color: white; border: none; }
+        
+        .table-responsive { overflow-x: auto; background: white; border: 1px solid #E2E8F0; border-radius: 4px; }
         table.styled-table { width: 100%; border-collapse: collapse; }
-        table.styled-table th, table.styled-table td { padding: 16px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--border-color); vertical-align: top; }
-        table.styled-table th { background-color: #F8FAFC; font-weight: 600; border-bottom: 2px solid #CBD5E1; color: var(--text-main); }
+        table.styled-table th, table.styled-table td { padding: 12px; text-align: left; font-size: 12px; border-bottom: 1px solid #F1F5F9; vertical-align: top; }
+        table.styled-table th { background-color: #F8FAFC; font-weight: 600; color: #475569; border-bottom: 1px solid #CBD5E1; text-transform: uppercase; font-size: 11px; }
         
-        img.thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.2s; }
-        .panel-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;}
-        .panel-on { background: var(--brand-light); color: var(--brand-dark); border: 1px solid var(--brand-green); }
-        .panel-off { background: var(--danger-bg); color: var(--danger); border: 1px solid #FECACA; }
+        img.thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; border: 1px solid #CBD5E1; cursor: pointer; }
+        
+        .panel-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; line-height: 1.2; }
+        .panel-on { background: #ECFDF5; color: #059669; border: 1px solid #6EE7B7; }
+        .panel-off { background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
-        .modal-content { max-width: 90%; max-height: 90%; border-radius: 8px; }
-        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 36px; font-weight: bold; cursor: pointer; }
+        .pending-alert-box { background: #FFFBEB; border-left: 3px solid #D97706; padding: 14px; border-radius: var(--radius-sm); margin-bottom: 20px; }
+        .pending-alert-box h4 { margin: 0 0 10px 0; color: #B45309; font-size: 12px; text-transform: uppercase; }
+        .pending-item { background: white; padding: 10px 12px; border-radius: 4px; margin-bottom: 6px; border: 1px solid #FDE68A; font-size: 11px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; color: #334155; }
 
-        #loadingOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 999; align-items: center; justify-content: center; flex-direction: column; font-weight: bold; color: var(--brand-green); }
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15,23,42,0.9); align-items: center; justify-content: center; }
+        .modal-content { max-width: 90%; max-height: 90%; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 30px; cursor: pointer; opacity: 0.7; }
 
-        details > summary { list-style: none; font-weight: 600; }
-        details > summary::-webkit-details-marker { display: none; }
+        #loadingOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 999; align-items: center; justify-content: center; flex-direction: column; font-weight: 600; color: var(--panel-slate); }
 
-        /* KELAS KHUSUS PDF/PRINT (DIPERKECIL AGAR MUAT BANYAK) */
         .print-only, .print-table-container { display: none !important; }
 
+        /* PRINT STYLES - LAYOUT TANGGAL DI KIRI & PANEL DI KANAN */
         @media print {
-            @page { margin: 0.5cm; size: A4 portrait; } /* Margin kertas sangat tipis */
+            @page { margin: 0.5cm; size: A4 portrait; }
+            body { background: white; padding: 0; color: black; display: block; }
             
-            body { background: white; padding: 0; color: black; }
-            .no-print, .ui-table-container { display: none !important; }
+            .no-print, .ui-table-container, .hooseki-faceplate form, .building-toggle, .server-status-container, .panel-sticker { display: none !important; }
+            
+            .app-container, .hooseki-faceplate, .paper-log { box-shadow: none !important; border: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; max-width: 100%; }
+            
             .print-only { display: flex !important; }
             .print-table-container { display: block !important; margin-top: 5px; }
             
-            .app-container { box-shadow: none; border: none; max-width: 100%; width: 100%; margin: 0; }
+            .app-header { background: transparent !important; color: #000 !important; border: none !important; border-bottom: 2px solid #000 !important; padding: 0 0 10px 0 !important; box-shadow: none !important; border-radius: 0 !important; margin-bottom: 10px !important; }
+            .app-header h2 { font-size: 11px !important; color: #000 !important; }
+            .app-header p { font-size: 8px !important; color: #333 !important; }
             
-            /* Header Laporan Resmi - Dibuat Pipih */
-            .app-header { 
-                background: #075E33 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; 
-                padding: 6px 10px !important; border-bottom: 2px solid #00A859 !important; border-radius: 0 !important; margin-bottom: 10px !important;
+            #printMonthHeader { font-size: 10px !important; margin-bottom: 6px !important; padding-bottom: 4px !important; border-bottom: 1px solid #000 !important; text-align: center; font-weight: 700; }
+            
+            table.styled-table { border-collapse: collapse !important; width: 100% !important; border: 1px solid #000 !important;}
+            table.styled-table th, table.styled-table td { padding: 4px 6px !important; font-size: 9px !important; line-height: 1.2 !important; border: 1px solid #999 !important; color: #000 !important; }
+            table.styled-table th { background-color: #EEE !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 9px !important; text-align: center !important; }
+            
+            /* KARTU TANGGAL & KARTU PANEL BERSEBELAHAN SAAT PRINT */
+            .print-row-container {
+                display: flex; gap: 4px; width: 100%; align-items: stretch;
             }
-            .app-header h2 { font-size: 11px !important; margin-bottom: 2px !important; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
-            .app-header p { font-size: 8px !important; margin: 0 !important; opacity: 0.9; }
-            
-            .app-body { padding: 0 !important; }
-            .history-section { margin-top: 0 !important; padding-top: 0 !important; border-top: none; }
-            
-            #printMonthHeader { font-size: 10px !important; margin-bottom: 6px !important; padding-bottom: 4px !important; border-bottom: 1px solid #00A859 !important; }
+            .print-date-card {
+                flex: 0 0 42%;
+                border: 1px solid #000 !important; background: #F8FAFC !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                padding: 4px; border-radius: 3px; text-align: center; display: flex; flex-direction: column; justify-content: center;
+            }
+            .print-panel-card {
+                flex: 1; border: 1px solid #666 !important; padding: 3px; border-radius: 3px; background: #FFF !important;
+            }
 
-            /* Tampilan Tabel Resmi - Padding & Teks Dikecilkan Drastis */
-            table.styled-table { border-collapse: collapse !important; width: 100% !important; border: 1px solid #CBD5E1 !important;}
-            table.styled-table th, table.styled-table td { 
-                padding: 4px 6px !important; font-size: 9px !important; line-height: 1.2 !important; border: 1px solid #CBD5E1 !important;
-            }
-            table.styled-table th { 
-                background-color: #E2E8F0 !important; color: #1E293B !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; 
-                font-size: 9px !important; text-transform: uppercase; text-align: center !important; padding: 6px !important;
-            }
+            .panel-badge { padding: 3px 4px !important; font-size: 7.5px !important; margin-bottom: 2px !important; border-width: 1px !important; color: #000 !important; border-color: #666 !important; background: #F9F9F9 !important; }
+            .kendala-item { margin-bottom: 4px !important; border: 1px solid #666 !important; }
+            .kendala-header, .kendala-body { padding: 4px 6px !important; background: transparent !important; color: #000 !important;}
+            .kendala-body span { font-size: 9px !important; color: #000 !important; }
             
-            /* Override Styles via Class (Agar lebih rapat di PDF) */
-            .panel-badge { padding: 2px 4px !important; font-size: 7px !important; margin-bottom: 4px !important; border-width: 1px !important; }
-            .info-label { margin-top: 4px !important; font-size: 8px !important; margin-bottom: 0 !important; }
-            .info-val { font-size: 9px !important; margin-bottom: 2px !important; }
+            .aman-badge-ringkas { padding: 2px 4px !important; font-size: 8.5px !important; border: 1px solid #999 !important; gap: 2px !important; margin-bottom: 2px !important; background: transparent !important; color: #000 !important;}
+            .aman-badge-ringkas span { font-size: 8px !important; }
             
-            .aman-box { padding: 4px !important; margin: 0 !important; }
-            .aman-box span { font-size: 9px !important; }
-            
-            .kendala-item { margin-bottom: 4px !important; }
-            .kendala-header { padding: 4px 6px !important; }
-            .kendala-body { padding: 4px 6px !important; }
-            .kendala-body span { font-size: 9px !important; }
-
-            /* Box Lantai AMAN Tampilan Expand */
-            .print-only div[style*="padding: 4px 8px"], td span[style*="display:inline-block"] { 
-                padding: 2px 4px !important; margin: 1px !important; font-size: 8px !important; border: 1px solid #CBD5E1 !important; 
-                background-color: #F8FAFC !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; 
-            }
-            
-            /* Thumbnail Foto dikecilkan lagi */
-            img.thumb { width: 32px !important; height: 32px !important; border-radius: 4px !important; border: 1px solid #94A3B8 !important; }
+            img.thumb { width: 32px !important; height: 32px !important; border-radius: 4px !important; border: 1px solid #999 !important; }
         }
-
         @media (max-width: 600px) { .kendala-grid, .photo-upload-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div id="loadingOverlay">
-    <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
-    <div>Sedang Menyimpan Laporan...</div>
+    <div style="font-size: 30px; margin-bottom: 10px;">⏳</div>
+    <div style="font-size: 14px; letter-spacing: 1px;">MENYIMPAN DATA...</div>
 </div>
 
 <div class="app-container">
-    <div class="app-header">
-        <h2>RS HERMINA SOLO GEDUNG BARU</h2>
-        <p>Laporan Resmi Sistem Monitoring Pengecekan Harian Fire Alarm Panel</p>
-    </div>
+    
+    <!-- STIKER PLAT -->
+    <div class="panel-sticker">ADDRESSABLE FIRE ALARM CONTROL PANEL</div>
 
-    <div class="app-body">
+    <!-- FACEPLATE BIRU ELEGAN -->
+    <div class="hooseki-faceplate">
+        
+        <!-- LAYAR LCD -->
+        <div class="app-header">
+            <h2 id="judulHeader">RS HERMINA SOLO GEDUNG BARU</h2>
+            <p>SYSTEM MONITORING PANEL</p>
+        </div>
+
         <div class="no-print">
             <div class="server-status-container">
-                <span id="serverStatusBadge" class="server-status-badge">✔️ Siap Digunakan</span>
+                <span id="serverStatusBadge" class="server-status-badge status-online">● SYSTEM ONLINE</span>
+            </div>
+
+            <!-- TAB GEDUNG -->
+            <div class="building-toggle">
+                <button type="button" id="btnGdLama" onclick="switchGedung('Gedung Lama')">Gedung Lama</button>
+                <button type="button" id="btnGdBaru" class="active" onclick="switchGedung('Gedung Baru')">Gedung Baru</button>
             </div>
             
             <div id="pendingAlertContainer"></div>
 
             <form id="inspectionForm">
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
                     <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label style="display: flex; justify-content: space-between; align-items: center;">
-                            Waktu Pengecekan: 
-                            <button type="button" onclick="setDefaultTime()" style="background: var(--brand-light); border: 1px solid var(--brand-green); color: var(--brand-dark); font-size: 10px; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: 600;">🔄 Update Waktu</button>
-                        </label>
+                        <label>Waktu Pengecekan:</label>
                         <input type="datetime-local" id="waktuCheck" required>
                     </div>
                     <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label>Nama Petugas / Teknisi:</label>
-                        <input type="text" id="namaPetugas" placeholder="Masukkan nama Anda..." required>
+                        <label>Nama Teknisi (ID):</label>
+                        <input type="text" id="namaPetugas" placeholder="Masukkan ID/Nama..." required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Status Panel Utama:</label>
+                    <label id="labelStatusPanel">MAIN PANEL STATUS (Gedung Baru):</label>
                     <div class="status-toggle full-width">
-                        <label class="toggle-aman"><input type="radio" name="panel_status" value="On Standby" checked><span>On Standby</span></label>
-                        <label class="toggle-kendala"><input type="radio" name="panel_status" value="Off"><span>Off / Trouble</span></label>
+                        <label class="toggle-aman"><input type="radio" name="panel_status" value="On Standby" checked onchange="togglePanelNote(false)"><span>ON STANDBY</span></label>
+                        <label class="toggle-kendala"><input type="radio" name="panel_status" value="Off" onchange="togglePanelNote(true)"><span>OFF / TROUBLE</span></label>
+                    </div>
+                    <div id="panelNoteArea" class="panel-note-area">
+                        <label style="color:#FCA5A5;">TROUBLE LOG (Opsional):</label>
+                        <input type="text" id="panelNoteText" placeholder="Input error code / kendala...">
                     </div>
                 </div>
 
-                <div class="section-title">Pemeriksaan Kondisi Per Lantai</div>
+                <div class="section-title" id="labelLantai">ZONE CONDITIONS (Gedung Baru)</div>
                 <div id="floorListContainer"></div>
 
-                <div class="section-title" style="margin-top: 32px;">Lampiran Bukti Foto (Wajib/Opsional)</div>
+                <div class="form-group" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <label>📝 ADDITIONAL NOTES:</label>
+                    <input type="text" id="catatanTambahan" placeholder="Tulis catatan operasional tambahan...">
+                </div>
+
+                <div class="section-title" style="margin-top: 24px;">EVIDENCE ATTACHMENT</div>
                 <div class="photo-upload-grid">
                     <div class="photo-box">
-                        <label for="kameraInput"><i>📸</i> Ambil Kamera</label>
+                        <label for="kameraInput"><i>📷</i> CAPTURE</label>
                         <input type="file" id="kameraInput" accept="image/*" capture="environment" onchange="handleImage(this, 'kamera')">
-                        <div id="infoKamera" class="file-info">Belum ada foto</div>
+                        <div id="infoKamera" class="file-info">NO MEDIA</div>
                     </div>
                     <div class="photo-box">
-                        <label for="galeriInput"><i>🖼️</i> Pilih Galeri</label>
+                        <label for="galeriInput"><i>📂</i> BROWSE</label>
                         <input type="file" id="galeriInput" accept="image/*" onchange="handleImage(this, 'galeri')">
-                        <div id="infoGaleri" class="file-info">Belum ada foto</div>
+                        <div id="infoGaleri" class="file-info">NO MEDIA</div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-submit">💾 Simpan Laporan</button>
+                <button type="submit" class="btn-submit">SAVE TO DATABASE</button>
             </form>
         </div>
+    </div> 
 
-        <div class="history-section">
-            <div class="history-header no-print">
-                <div class="section-title" style="margin:0;">Riwayat & Log Pengecekan</div>
-                <div class="filter-controls">
-                    <button class="btn-refresh" onclick="fetchDataFromSheets()">🔄 Muat Data Server</button>
-                    <input type="month" id="filterBulan" onchange="renderHistoryTable()" style="width: auto;">
-                    <button class="btn-pdf" onclick="window.print()">📥 Cetak PDF / Print</button>
-                </div>
+    <!-- KERTAS LOG -->
+    <div class="paper-log history-section">
+        <div class="history-header no-print">
+            <div class="history-title" id="historySectionTitle">SYSTEM LOG</div>
+            <div class="filter-controls" style="display: flex; gap: 8px; align-items: center;">
+                <input type="month" id="filterBulan" onchange="renderHistoryTable()" style="width: auto; padding: 6px 10px; border:1px solid #CBD5E1; border-radius: 4px; font-size:12px;">
+                <button class="btn-pdf" onclick="window.print()">🖨️ PRINT LOG</button>
             </div>
-
-            <!-- WADAH TABEL KHUSUS TAMPILAN LAYAR (TERBARU DI ATAS) -->
-            <div class="table-responsive ui-table-container">
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Info Harian</th>
-                            <th style="width: 60%;">Lokasi & Status Pengecekan</th>
-                            <th style="width: 15%;">Foto</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBodyUI">
-                        <tr><td colspan="3" style="text-align:center; padding:30px;">Memuat data...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- WADAH TABEL KHUSUS CETAK PDF (TERKECIL/TERLAMA DI ATAS) -->
-            <div class="table-responsive print-table-container">
-                <div id="printMonthHeader" style="text-align: center; font-size: 13px; font-weight: 700; margin-bottom: 15px; color: #075E33; text-transform: uppercase; border-bottom: 2px solid #00A859; padding-bottom: 8px; display: inline-block; width: 100%;">
-                    <!-- Judul bulan akan dirender lewat JS di sini -->
-                </div>
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Info Harian</th>
-                            <th style="width: 60%;">Lokasi & Status Pengecekan</th>
-                            <th style="width: 15%;">Foto</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBodyPrint">
-                        <tr><td colspan="3" style="text-align:center; padding:30px;">Memuat data...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            
         </div>
-    </div>
+
+        <div class="table-responsive ui-table-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">TIMESTAMP</th>
+                        <th style="width: 60%;">ZONE STATUS</th>
+                        <th style="width: 15%;">IMG</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBodyUI">
+                    <tr><td colspan="3" style="text-align:center; padding:30px;">Loading database...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive print-table-container">
+            <div id="printMonthHeader" style="text-align: center; font-size: 13px; font-weight: 700; margin-bottom: 15px; color: #000; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 8px; display: inline-block; width: 100%;">
+            </div>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th style="width: 38%;">TIMESTAMP & PANEL</th>
+                        <th style="width: 47%;">ZONE STATUS</th>
+                        <th style="width: 15%;">IMG</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBodyPrint">
+                    <tr><td colspan="3" style="text-align:center; padding:30px;">Loading database...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div> 
+    
 </div>
 
 <div id="photoModal" class="modal" onclick="closePhotoModal()">
@@ -276,10 +363,9 @@
 </div>
 
 <script>
-    // PAStikan link App Script ini valid milik Anda
-    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzWFTR45zhxcnhKJwdWrzPdveafvuVpKPhJKGwzoELqMmAoRPHGrFFp52Bp5sMj2FaQ8w/exec"; 
+    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyGZgVzikgLgK3UOqfXe_hDISw0Ru0WD-hI-QQkOa6PBQ3D1z2LVH-PwWEXwqVb9kMZ/exec"; 
 
-    const rsData = {
+    const rsDataBaru = {
         "Lantai Dasar": { "Zone 1": ["Parkiran", "R. Panel"] },
         "Lantai 1": { "Zone 1": ["Parkiran", "R. Elektronik", "R. Panel"] },
         "Lantai 2": {
@@ -299,18 +385,118 @@
         }
     };
 
+    const rsDataLama = {
+        "Lantai 1": {
+            "Zone 1": ["RUANG PANEL", "RUANG CUCI LAUNDRY", "MUSHOLA", "RUANG JENAZAH", "RUANG GAS MEDIS", "RUANG GALON", "RUANG PANEL UTAMA", "KUKAMINA MART"],
+            "Zone 2": ["KORIDOR BELAKANG", "KORIDOR DEPAN", "KORIDOR SAYAP KIRI", "KORIDOR SAYAP KANAN"],
+            "Zone 3": ["R.KONSELING FARMASI", "SPOEL HOEK", "RUANG FARAMASI", "RUANG KASIR", "POLI PARU", "POLI KANDUNGAN", "POLI NEOROLOGI", "POLI MATA", "POLI KLINIK PENYAKIT DALAM", "POLI JANTUNG", "POLI THT", "POLI BEDAH", "POLI GIGI"],
+            "Zone 4": ["TOILET PRIA", "TOILET WANITA", "LOKER", "LABOLATURIUM", "POLI TB DOTS", "REKAM MEDIS", "RUANG PANEL", "RUANG HIDRANT", "RUANG TRAVO"]
+        },
+        "Lantai 2": {
+            "Zone 1": ["RUANG TB", "RUANG USG", "RUANG CT SCAN", "PONEK", "RUANG ISOLASI", "RUANG DEKONTAMINASI"],
+            "Zone 2": ["KORIDOR DEPAN", "KORIDOR BELAKANG", "KORIDOR SAYAP KIRI", "KORIDOR SAYAP KANAN"],
+            "Zone 3": ["RUANG IGD KAMALA", "RUANG FARMASI", "RUANG IGD", "RUANG IGD PADMA", "RUANG TUNGGU", "RUANG LAKTASI", "PENDAFTARAN"],
+            "Zone 4": ["TOILET PRIA", "TOILET WANITA", "POLI GIGI", "POLI ANAK 213", "POLI ANAK 211", "MEDICAL CHECK UP", "UNIT PENGADUAN", "RUANG PANEL DEPAN"]
+        },
+        "Lantai 3": {
+            "Zone 1": ["RUANG PANEL BELAKANG", "LOKER", "GUDANG", "VK VIP 1TT", "VK KELAS 2TT", "VK ISOLASI 1TT", "CAPD", "HD VIP", "HEMODIALISA", "RECOVERY"],
+            "Zone 2": ["KORIDOR", "LOUNGE FLAMBOYAN", "PANEL DEPAN", "KORDOR DEPAN", "KORIDOR TENGAH", "KORIDOR BELAKANG"],
+            "Zone 3": ["KORIDOR", "GUDANG STERIL", "PACKING", "DEKON", "ADM SCCU", "SPLH", "R.TUNGGU OK,VK,HD KAMALA", "VK KELAS 2TT", "RUANG DOKTER"],
+            "Zone 4": ["DEPO OBAT", "AREA BELAKANG DEPO OBAT", "PREOP", "AREA BELAKANG PREOP", "RUANG DOKTER", "RUANG GANTI PRIA", "RUANG GANTI WANITA", "TRAFO ISOLASI", "AREA OK"]
+        },
+        "Lantai 4": {
+            "Zone 1": ["RUANG PANEL BELAKANG", "RUANG 426", "LOKER PRIA", "RUANG 424", "RUANG 422", "RUANG 420", "RUANG 418", "RUANG 416", "RUANG 414", "RUANG 417", "RUANG 401"],
+            "Zone 2": ["KORIDOR DEPAN", "KORIDOR BELAKANG", "KORIDOR SAYAP KIRI", "KORIDOR SAYAP KANAN"],
+            "Zone 3": ["RUANG 412", "RUANG 410", "RUANG 408", "RUANG 406", "RUANG 404", "AREA NS", "RUANG 421", "RUANG 423", "RUANG 425", "RUANG 427", "RUANG 428"],
+            "Zone 4": ["LOKER WANITA", "RUANG 415", "RUANG 411", "RUANG 407", "RUANG GANTI PRIA", "RUANG PANEL DEPAN"]
+        },
+        "Lantai 5": {
+            "Zone 1": ["RUANG PANEL DEPAN", "RUANG 516", "RUANG LOKER", "RUANG 514", "RUANG 512", "RUANG PISIOTERAPI", "RUANG 532", "RUANG 530", "RUANG OKUPASI TERAPI 1", "RUANG OKUPASI TERAPI 2", "RUANG TERAPI WICARA 1", "RUANG TERAPI WICARA 2"],
+            "Zone 2": ["KORIDOR BELAKANG", "KORIDOR DEPAN", "KORIDOR SAYAP KIRI", "KORIDOR SAYAP KANAN"],
+            "Zone 3": ["RUANG 520", "RUANG 519", "RUANG 517", "RUANG 515", "RUANG 513", "RUANG 510", "RUANG BOBATH", "RUANG TERAPI WICARA 3", "RUANG TERAPI OKUPASI 3", "RUANG PISIOTERAPI"],
+            "Zone 4": ["RUANG 511", "RUANG 506", "RUANG 507", "RUANG 508", "RUANG 509", "RUANG 504", "RUANG 505", "RUANG 502", "RUANG 503", "PANEL BELAKANG"]
+        },
+        "Lantai 6": {
+            "Zone 1": ["RUANG PANEL BELAKANG", "LOKER 517", "RUANG 616", "RUANG 614", "RUANG TUNGGU", "RUANG HCU"],
+            "Zone 2": ["KORIDOR BELAKANG", "KORIDOR DEPAN", "KORIDOR SAYAP KIRI", "KORIDOR SAYAP KANAN"],
+            "Zone 3": ["RUANG 617", "RUANG 615", "RUANG 613", "LOKER PERAWAT", "RUANG 604", "RUANG 607", "RUANG 605", "RUANG 602", "PANEL DEPAN"],
+            "Zone 4": ["AREA GUDANG"]
+        },
+        "Lantai 7": {
+            "Zone 1": ["RUANG SERBAGUNA", "RUANG BPJS", "RUANG KEUANGAN", "RUANG PERSONALIA", "RUANG ADM MEDIS", "RUANG DIREKTUR", "RUANG MAKAN", "RUANG PANTRI", "DAPUR", "GUDANG KERING", "GUDANG BASAH", "RUANG GAS", "RUANG UNIT SIMRS", "PANEL DEPAN"],
+            "Zone 2": ["KORIDOR BELAKANG", "KORIDOR DEPAN", "KORIDOR SAYAP KIRI", "KORIDOR SAYAP KANAN"],
+            "Zone 3": ["MUSHOLA", "RUANG 715", "RUANG 717", "RUANG 719", "RUANG MUTU & PPI", "GUDANG FARMASI", "G. 712", "G. 710"],
+            "Zone 4": ["RUANG ASRAMA", "GUDANG FARMASI", "GUDANG MARKETING", "RUANG KONSELING", "RUANG LINE BERSIH", "RUANG 708", "RUANG 706", "RUANG KOMDIK", "RUANG LINE & ALAT", "RUANG KAMAR ISOLASI", "RUANG 703", "PANEL BELAKANG"]
+        }
+    };
+
     let currentPhotoBase64 = "";
     let reportHistory = [];
     let pendingIssues = []; 
+    
+    let currentGedung = "Gedung Baru";
+    let activeRsData = rsDataBaru;
+
+    function parseDateLokal(dateStr) {
+        if (!dateStr) return new Date(0);
+        let dStr = dateStr.toString().trim();
+        let year = 1970, month = 0, day = 1, hour = 0, minute = 0;
+
+        let isoMatch = dStr.match(/(\d{4})-(\d{2})-(\d{2})/);
+        if (isoMatch) {
+            year = parseInt(isoMatch[1], 10);
+            month = parseInt(isoMatch[2], 10) - 1;
+            day = parseInt(isoMatch[3], 10);
+        } else {
+            let slashMatch = dStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (slashMatch) {
+                day = parseInt(slashMatch[1], 10);
+                month = parseInt(slashMatch[2], 10) - 1;
+                year = parseInt(slashMatch[3], 10);
+            } else {
+                let fallback = new Date(dStr);
+                if (!isNaN(fallback.getTime())) return fallback;
+                return new Date(0);
+            }
+        }
+
+        let timeMatch = dStr.match(/(\d{1,2})[:.](\d{1,2})/);
+        if (timeMatch) {
+            hour = parseInt(timeMatch[1], 10);
+            minute = parseInt(timeMatch[2], 10);
+        }
+
+        return new Date(year, month, day, hour, minute, 0);
+    }
+
+    function switchGedung(gedung) {
+        currentGedung = gedung;
+        activeRsData = gedung === "Gedung Baru" ? rsDataBaru : rsDataLama;
+        
+        document.getElementById('btnGdLama').className = gedung === "Gedung Lama" ? "active" : "";
+        document.getElementById('btnGdBaru').className = gedung === "Gedung Baru" ? "active" : "";
+        
+        document.getElementById('judulHeader').innerText = "RS HERMINA SOLO " + gedung.toUpperCase();
+        document.getElementById('labelStatusPanel').innerText = "MAIN PANEL STATUS (" + gedung + "):";
+        document.getElementById('labelLantai').innerText = "ZONE CONDITIONS (" + gedung + ")";
+        document.getElementById('historySectionTitle').innerText = "SYSTEM LOG - " + gedung.toUpperCase();
+        
+        renderFloorForm();
+        
+        if (reportHistory.length > 0) {
+            calculatePendingIssuesFromServer();
+            renderHistoryTable();
+        }
+    }
 
     function checkServerStatus() {
         const badge = document.getElementById('serverStatusBadge');
         if (!navigator.onLine) {
             badge.className = "server-status-badge status-offline";
-            badge.innerHTML = "⚠️ Offline Mode (Cek Internet Anda)";
+            badge.innerHTML = "● SYSTEM OFFLINE";
         } else {
-            badge.className = "server-status-badge";
-            badge.innerHTML = "✔️ Terhubung ke Server";
+            badge.className = "server-status-badge status-online";
+            badge.innerHTML = "● SYSTEM ONLINE";
         }
     }
     window.addEventListener('online', checkServerStatus);
@@ -337,59 +523,47 @@
     setDefaultTime();
 
     function formatDateTimeClean(rawStr) {
-        if (!rawStr) return '-';
-        try {
-            let d = new Date(rawStr);
-            if (isNaN(d.getTime())) {
-                d = new Date(rawStr.replace(' ', 'T'));
-            }
-            if (!isNaN(d.getTime())) {
-                const dd = String(d.getDate()).padStart(2, '0');
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const yyyy = d.getFullYear();
-                const hh = String(d.getHours()).padStart(2, '0');
-                const min = String(d.getMinutes()).padStart(2, '0');
-                return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
-            }
-        } catch(e) {}
-        return rawStr.replace('T', ' ').replace(/\.\d{3}Z?$/, '').replace('Z', '');
+        let d = parseDateLokal(rawStr);
+        if (!isNaN(d.getTime()) && d.getTime() !== 0) {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            const hh = String(d.getHours()).padStart(2, '0');
+            const min = String(d.getMinutes()).padStart(2, '0');
+            return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
+        }
+        return rawStr;
     }
 
-    function formatTanggalOnly(waktuAsli) {
-        try {
-            const d = new Date(waktuAsli.includes('T') ? waktuAsli : waktuAsli.replace(' ', 'T'));
-            if (!isNaN(d.getTime())) {
-                const yyyy = d.getFullYear();
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                return `${dd}-${mm}-${yyyy}`;
-            }
-        } catch(e) {}
-        return waktuAsli.split(' ')[0];
+    function togglePanelNote(isOff) {
+        document.getElementById('panelNoteArea').style.display = isOff ? "block" : "none";
+        if (!isOff) {
+            document.getElementById('panelNoteText').value = "";
+        }
     }
 
     function renderFloorForm() {
         const container = document.getElementById('floorListContainer');
         container.innerHTML = '';
-        Object.keys(rsData).forEach((floor, idx) => {
-            let zoneOptions = `<option value="">-- Pilih Zona --</option>`;
-            Object.keys(rsData[floor]).forEach(zone => { zoneOptions += `<option value="${zone}">${zone}</option>`; });
+        Object.keys(activeRsData).forEach((floor, idx) => {
+            let zoneOptions = `<option value="">-- PILIH ZONA --</option>`;
+            Object.keys(activeRsData[floor]).forEach(zone => { zoneOptions += `<option value="${zone}">${zone.toUpperCase()}</option>`; });
 
             container.innerHTML += `
                 <div class="floor-card">
                     <div class="floor-header-row">
-                        <span class="floor-name">${floor}</span>
+                        <span class="floor-name">${floor.toUpperCase()}</span>
                         <div class="status-toggle">
-                            <label class="toggle-aman"><input type="radio" name="status_${idx}" value="Aman" checked onchange="toggleBox(${idx}, false)"><span>Aman</span></label>
-                            <label class="toggle-kendala"><input type="radio" name="status_${idx}" value="Kendala" onchange="toggleBox(${idx}, true)"><span>Kendala</span></label>
+                            <label class="toggle-aman"><input type="radio" name="status_${idx}" value="Aman" checked onchange="toggleBox(${idx}, false)"><span>NORMAL</span></label>
+                            <label class="toggle-kendala"><input type="radio" name="status_${idx}" value="Kendala" onchange="toggleBox(${idx}, true)"><span>TROUBLE</span></label>
                         </div>
                     </div>
                     <div id="kendala_area_${idx}" class="kendala-input-area">
                         <div class="kendala-grid">
-                            <div><label style="color:var(--danger);">Pilih Zona:</label><select id="zone_select_${idx}" onchange="updateRoomDropdown(${idx}, '${floor}')">${zoneOptions}</select></div>
-                            <div><label style="color:var(--danger);">Pilih Ruangan:</label><select id="room_select_${idx}"><option value="">-- Pilih Ruangan --</option></select></div>
+                            <div><label style="color:#FCA5A5;">ZONA ERROR:</label><select id="zone_select_${idx}" onchange="updateRoomDropdown(${idx}, '${floor}')">${zoneOptions}</select></div>
+                            <div><label style="color:#FCA5A5;">LOKASI RUANG:</label><select id="room_select_${idx}"><option value="">-- PILIH RUANG --</option></select></div>
                         </div>
-                        <div><input type="text" id="ket_text_${idx}" placeholder="Catatan Kendala (Contoh: Smoke detektor rusak)..."></div>
+                        <div><input type="text" id="ket_text_${idx}" placeholder="Input deskripsi kerusakan detektor..."></div>
                     </div>
                 </div>`;
         });
@@ -400,9 +574,9 @@
     function updateRoomDropdown(idx, floorName) {
         const selectedZone = document.getElementById(`zone_select_${idx}`).value;
         const roomSelect = document.getElementById(`room_select_${idx}`);
-        roomSelect.innerHTML = '<option value="">-- Pilih Ruangan --</option>';
-        if (selectedZone && rsData[floorName][selectedZone]) {
-            rsData[floorName][selectedZone].forEach(room => { roomSelect.innerHTML += `<option value="${room}">${room}</option>`; });
+        roomSelect.innerHTML = '<option value="">-- PILIH RUANG --</option>';
+        if (selectedZone && activeRsData[floorName][selectedZone]) {
+            activeRsData[floorName][selectedZone].forEach(room => { roomSelect.innerHTML += `<option value="${room}">${room.toUpperCase()}</option>`; });
         }
     }
 
@@ -415,8 +589,8 @@
         const otherInfo = type === 'kamera' ? 'infoGaleri' : 'infoKamera';
 
         otherInput.value = "";
-        document.getElementById(otherInfo).innerText = "Belum ada foto";
-        document.getElementById(infoId).innerText = "Memproses gambar...";
+        document.getElementById(otherInfo).innerText = "NO MEDIA";
+        document.getElementById(infoId).innerText = "PROCESSING...";
 
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -436,7 +610,7 @@
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
                 currentPhotoBase64 = canvas.toDataURL('image/jpeg', 0.4); 
-                document.getElementById(infoId).innerText = "✔️ Gambar siap dikirim (" + file.name + ")";
+                document.getElementById(infoId).innerText = "✔️ MEDIA READY (" + file.name + ")";
             };
             img.src = e.target.result;
         };
@@ -446,31 +620,35 @@
     function hitungDurasi(waktuAwal) {
         if (!waktuAwal) return '';
         try {
-            let start = new Date(waktuAwal);
-            if (isNaN(start.getTime())) {
-                start = new Date(waktuAwal.replace(' ', 'T'));
-            }
+            let start = parseDateLokal(waktuAwal);
+            if (start.getTime() === 0) return '';
             let now = new Date();
             let diffMs = now - start;
             if (diffMs < 0 || isNaN(diffMs)) return '';
             
             let diffMins = Math.floor(diffMs / 60000);
-            if (diffMins < 60) return `${diffMins} menit lalu`;
+            if (diffMins < 60) return `${diffMins} mins ago`;
             let diffHours = Math.floor(diffMins / 60);
-            if (diffHours < 24) return `${diffHours} jam lalu`;
+            if (diffHours < 24) return `${diffHours} hrs ago`;
             let diffDays = Math.floor(diffHours / 24);
-            return `${diffDays} hari lalu`;
+            return `${diffDays} days ago`;
         } catch (e) { return ''; }
     }
 
     function calculatePendingIssuesFromServer() {
         let issueState = {};
 
-        // Pengurutan Ascending agar log dibaca sesuai kronologi waktu
-        let sortedHistory = [...reportHistory].sort((a, b) => {
-            let dateA = new Date(a.waktu.includes('T') ? a.waktu : a.waktu.replace(' ', 'T'));
-            let dateB = new Date(b.waktu.includes('T') ? b.waktu : b.waktu.replace(' ', 'T'));
-            return dateA - dateB; 
+        let sortedHistory = [...reportHistory].filter(item => {
+            let currGedungUpper = currentGedung.toUpperCase();
+            let rawGedung = item.gedung || item.Gedung || "";
+            let dataGedung = rawGedung.trim().toUpperCase();
+            
+            if (dataGedung === currGedungUpper) return true;
+            if (!dataGedung && item.laporan && item.laporan.toUpperCase().includes(currGedungUpper)) return true;
+            
+            return false;
+        }).sort((a, b) => {
+            return parseDateLokal(a.waktu) - parseDateLokal(b.waktu);
         });
 
         sortedHistory.forEach(item => {
@@ -550,34 +728,34 @@
         const container = document.getElementById('pendingAlertContainer');
         if (pendingIssues.length === 0) { container.innerHTML = ''; return; }
 
-        let html = `<div class="pending-alert-box"><h4>⚠️ PERHATIAN: Terdapat Kendala / Tindakan Sementara Belum Tuntas</h4>`;
+        let html = `<div class="pending-alert-box"><h4>⚠️ WARNING: UNRESOLVED HARDWARE ISSUES</h4>`;
         pendingIssues.forEach((issue, index) => {
             let isBypass = issue.isBypass === true;
-            let bgStyle = isBypass ? "background: #FEF9C3; border-left: 4px solid #F59E0B;" : "background: white;";
-            let textColor = isBypass ? "#B45309" : "var(--danger)";
-            let statusText = isBypass ? `[DI-AKALI / BYPASS] : ${issue.bypassNote}` : `[KENDALA] ${issue.note}`;
+            let bgStyle = isBypass ? "background: #FEF9C3; border-left: 3px solid #F59E0B;" : "background: white;";
+            let textColor = isBypass ? "#B45309" : "var(--led-red)";
+            let statusText = isBypass ? `[BYPASSED] : ${issue.bypassNote}` : `[TROUBLE] ${issue.note}`;
 
             let formattedWaktu = formatDateTimeClean(issue.waktuAwal);
             let durasi = hitungDurasi(issue.waktuAwal);
             let badgeDurasi = durasi ? ` <span style="background:#E2E8F0; padding:2px 6px; border-radius:4px; font-size:10px; color:#475569; display:inline-block; margin-left:4px;">🕒 ${durasi}</span>` : '';
-            let tanggalInfo = issue.waktuAwal ? `<div style="font-size:11px; color:#64748B; margin-top:4px; margin-bottom:4px;">Kendala sejak: <strong>${formattedWaktu}</strong>${badgeDurasi}</div>` : '';
+            let tanggalInfo = issue.waktuAwal ? `<div style="font-size:11px; color:#64748B; margin-top:4px; margin-bottom:4px;">Log date: <strong>${formattedWaktu}</strong>${badgeDurasi}</div>` : '';
 
             let bypassTimeInfo = '';
             if (isBypass && issue.bypassTime) {
-                bypassTimeInfo = `<div style="font-size:11px; color:#B45309; margin-top:2px;">Diakali sejak: <strong>${formatDateTimeClean(issue.bypassTime)}</strong></div>`;
+                bypassTimeInfo = `<div style="font-size:11px; color:#B45309; margin-top:2px;">Bypassed at: <strong>${formatDateTimeClean(issue.bypassTime)}</strong></div>`;
             }
 
             html += `<div class="pending-item" style="${bgStyle}">
                 <div style="flex: 1; min-width: 200px;">
                     <strong>${issue.floor}</strong> - ${issue.zone} (${issue.room})
                     ${tanggalInfo}
-                    <div style="color:${textColor}; font-size:12px; font-weight:600; margin-top:2px;">${statusText}</div>
+                    <div style="color:${textColor}; font-size:12px; font-weight:700; margin-top:2px;">${statusText}</div>
                     ${bypassTimeInfo}
-                    ${isBypass ? `<div style="font-size:11px; color:var(--text-muted); margin-top:4px;">(Catatan Awal: ${issue.note})</div>` : ''}
+                    ${isBypass ? `<div style="font-size:11px; color:#94A3B8; margin-top:4px;">(Original Issue: ${issue.note})</div>` : ''}
                 </div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
-                    ${!isBypass ? `<button type="button" style="background:var(--warning); color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600;" onclick="bypassIssue(${index})">🔧 Akali Sementara</button>` : ''}
-                    <button type="button" class="btn-resolve" onclick="resolveIssue(${index})">✔ Fix Permanen (Ganti Alat)</button>
+                    ${!isBypass ? `<button type="button" style="background:#F59E0B; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:10px; font-weight:600; text-transform:uppercase;" onclick="bypassIssue(${index})">🔧 Set Bypass</button>` : ''}
+                    <button type="button" class="btn-resolve" onclick="resolveIssue(${index})">✔ Set Resolved</button>
                 </div>
             </div>`;
         });
@@ -586,9 +764,9 @@
     }
 
     function bypassIssue(index) {
-        const nama = prompt("Masukkan nama Teknisi yang melakukan penanganan sementara:"); 
+        const nama = prompt("Masukkan ID/Nama Teknisi bypass:"); 
         if (!nama) return;
-        const catatan = prompt("Catatan Bypass (contoh: dilangsungkan, tunggu alat):"); 
+        const catatan = prompt("Catatan Bypass (contoh: dilangsungkan, tunggu part):"); 
         if (catatan === null) return; 
 
         const waktuLokal = getSafeLocalTime().replace('T', ' ');
@@ -599,36 +777,36 @@
         renderPendingAlerts();
 
         const logText = `[LOG BYPASS]|${pendingIssues[index].locKey}|${pendingIssues[index].note}|${catatan}|${waktuLokal}`;
-        submitDataToServer({ waktu: waktuLokal, petugas: nama, panel: "On Standby", laporan: logText, foto: "" }, "Tindakan Bypass dicatat!");
+        submitDataToServer({ waktu: waktuLokal, petugas: nama, panel: "On Standby", laporan: logText, foto: "", gedung: currentGedung }, "Bypass mode activated!");
     }
 
     function resolveIssue(index) {
-        const nama = prompt("Masukkan nama Petugas Perbaikan:"); 
+        const nama = prompt("Masukkan ID/Nama Petugas Perbaikan:"); 
         if (!nama) return;
-        const catatan = prompt("Catatan perbaikan (Alat apa yang diganti):"); 
+        const catatan = prompt("Catatan perbaikan (Komponen diganti):"); 
         if (catatan === null) return; 
 
         const waktuLokal = getSafeLocalTime().replace('T', ' ');
 
         const resolvedItem = pendingIssues[index];
-        const logText = `[LOG PERBAIKAN SELESAI]|${resolvedItem.locKey}|${resolvedItem.note}|${catatan || "Selesai ditangani"}|${waktuLokal}`;
+        const logText = `[LOG PERBAIKAN SELESAI]|${resolvedItem.locKey}|${resolvedItem.note}|${catatan || "Resolved"}|${waktuLokal}`;
 
         pendingIssues.splice(index, 1);
         renderPendingAlerts();
 
-        submitDataToServer({ waktu: waktuLokal, petugas: nama, panel: "Diperbaiki", laporan: logText, foto: "" }, "Perbaikan tuntas!");
+        submitDataToServer({ waktu: waktuLokal, petugas: nama, panel: "Diperbaiki", laporan: logText, foto: "", gedung: currentGedung }, "System restored!");
     }
 
     function fetchDataFromSheets() {
         if (!navigator.onLine || GOOGLE_SHEET_API_URL === "") {
-            const noIntHtml = `<tr><td colspan="3" style="text-align:center;">Tidak ada internet.</td></tr>`;
+            const noIntHtml = `<tr><td colspan="3" style="text-align:center;">Network Error.</td></tr>`;
             document.getElementById('historyTableBodyUI').innerHTML = noIntHtml;
             document.getElementById('historyTableBodyPrint').innerHTML = noIntHtml;
             return;
         }
 
         const badge = document.getElementById('serverStatusBadge');
-        badge.innerHTML = "⏳ Menarik data dari server...";
+        badge.innerHTML = "● SYNCING...";
 
         const urlAntiCache = GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime();
 
@@ -638,13 +816,14 @@
                 if (Array.isArray(data)) { 
                     reportHistory = data; 
                     calculatePendingIssuesFromServer(); 
+                    renderHistoryTable();
                 }
                 checkServerStatus();
-                renderHistoryTable();
             })
             .catch(err => {
                 console.error(err);
-                badge.innerHTML = "❌ Gagal memuat data server";
+                badge.className = "server-status-badge status-offline";
+                badge.innerHTML = "● SYNC FAILED";
             });
     }
 
@@ -653,31 +832,53 @@
         const tbodyPrint = document.getElementById('historyTableBodyPrint');
         const filterBulan = document.getElementById('filterBulan').value; 
         
-        // Atur teks Header Bulan untuk PDF
         let txtBulan = "";
         if(filterBulan) {
             const [y, m] = filterBulan.split('-');
             const dateObj = new Date(y, parseInt(m)-1, 1);
-            txtBulan = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            txtBulan = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase();
         } else {
-            txtBulan = "Semua Periode";
+            txtBulan = "ALL PERIODS";
         }
-        document.getElementById('printMonthHeader').innerText = `PERIODE LAPORAN: ${txtBulan}`;
+        document.getElementById('printMonthHeader').innerText = `PRINT LOG: ${txtBulan} (${currentGedung.toUpperCase()})`;
+
+        let filterParts = filterBulan ? filterBulan.split('-') : [];
+        let filterYear = filterParts.length ? parseInt(filterParts[0]) : null;
+        let filterMonth = filterParts.length ? parseInt(filterParts[1]) : null;
 
         let filteredHistory = reportHistory.filter(item => {
             if (!item.waktu) return false;
-            return item.waktu.startsWith(filterBulan) || item.waktu.includes(filterBulan.split('-').reverse().join('/')); 
+
+            let currGedungUpper = currentGedung.toUpperCase();
+            let rawGedung = item.gedung || item.Gedung || "";
+            let dataGedung = rawGedung.trim().toUpperCase();
+            let isGedungMatch = false;
+            
+            if (dataGedung === currGedungUpper) {
+                isGedungMatch = true;
+            } else if (!dataGedung && item.laporan && item.laporan.toUpperCase().includes(currGedungUpper)) {
+                isGedungMatch = true;
+            }
+            
+            if (!isGedungMatch) return false;
+
+            if (filterBulan) {
+                let d = parseDateLokal(item.waktu);
+                if (isNaN(d.getTime()) || d.getTime() === 0) return false;
+                
+                if (d.getFullYear() !== filterYear || (d.getMonth() + 1) !== filterMonth) {
+                    return false;
+                }
+            }
+            return true;
         });
 
-        // Selalu urutkan dari TANGGAL TERKECIL ke TERBESAR untuk acuan dasar (Ascending)
         filteredHistory.sort((a, b) => {
-            let dateA = new Date(a.waktu.includes('T') ? a.waktu : a.waktu.replace(' ', 'T'));
-            let dateB = new Date(b.waktu.includes('T') ? b.waktu : b.waktu.replace(' ', 'T'));
-            return dateA - dateB; 
+            return parseDateLokal(a.waktu) - parseDateLokal(b.waktu);
         });
 
         if (filteredHistory.length === 0) {
-            const emptyHtml = `<tr><td colspan="3" style="text-align:center; padding:30px;">Belum ada data di bulan ini.</td></tr>`;
+            const emptyHtml = `<tr><td colspan="3" style="text-align:center; padding:30px;">No logs found for <strong>${currentGedung}</strong>.</td></tr>`;
             tbodyUI.innerHTML = emptyHtml;
             tbodyPrint.innerHTML = emptyHtml;
             return;
@@ -719,15 +920,18 @@
         let dayOrder = []; 
 
         mainLogs.forEach(item => {
-            let dateKey = formatTanggalOnly(item.waktu); 
+            let dObj = parseDateLokal(item.waktu);
+            let dd = String(dObj.getDate()).padStart(2, '0');
+            let mm = String(dObj.getMonth() + 1).padStart(2, '0');
+            let yyyy = dObj.getFullYear();
+            let dateKey = `${dd}-${mm}-${yyyy}`; 
             
             if (!groupedByDay[dateKey]) {
                 groupedByDay[dateKey] = {
-                    times: new Set(),
-                    petugasSet: new Set(),
-                    latestPanel: item.panel,
+                    panelLogs: [], 
                     kendalas: new Map(),
                     amanList: new Set(),
+                    catatans: [],
                     photos: []
                 };
                 dayOrder.push(dateKey);
@@ -737,9 +941,12 @@
             
             let waktuLokal = formatDateTimeClean(item.waktu);
             let timeMatch = waktuLokal.match(/\d{2}:\d{2}/);
-            if (timeMatch) group.times.add(timeMatch[0]);
+            let jamText = timeMatch ? timeMatch[0] : '';
             
-            if (item.petugas) group.petugasSet.add(item.petugas);
+            if (item.panel) {
+                group.panelLogs.push({ time: jamText, panel: item.panel, petugas: item.petugas || '-' });
+            }
+
             if (item.foto && item.foto.length > 50) group.photos.push(item.foto);
             
             let lines = (item.laporan || "").split('\n');
@@ -754,11 +961,23 @@
                         let locKey = `${floor} - ${zone} (${room})`;
                         
                         if (!group.kendalas.has(locKey)) {
-                            group.kendalas.set(locKey, { floor, zoneRoom: `${zone} (${room})`, issueNote, locKey });
+                            group.kendalas.set(locKey, { 
+                                floor, 
+                                zoneRoom: `${zone} (${room})`, 
+                                issueNote, 
+                                locKey,
+                                petugasAwal: item.petugas || '-', 
+                                waktuAwal: jamText 
+                            });
                         }
                     }
-                } else if (line.includes('AMAN') && !line.includes('[PANEL')) {
-                    group.amanList.add(line.replace('• ', '').trim());
+                } else if (line.includes('[CATATAN TAMBAHAN]:')) {
+                    let noteText = line.replace('[CATATAN TAMBAHAN]:', '').trim();
+                    if (noteText) group.catatans.push(noteText);
+                } else if (line.includes('AMAN') && !line.includes('[PANEL') && !line.includes('[GEDUNG:')) {
+                    let textAman = line.replace('• ', '').trim();
+                    textAman = textAman.replace(new RegExp(currentGedung, "gi"), '').trim(); 
+                    group.amanList.add(textAman);
                 }
             });
         });
@@ -769,27 +988,49 @@
              group.amanList.forEach(amanText => {
                  let floorName = amanText.split(':')[0].trim(); 
                  group.kendalas.forEach(kData => {
-                     if (kData.floor === floorName) toRemove.push(amanText);
+                     let kFloorClean = kData.floor.replace(new RegExp(currentGedung, "gi"), '').trim();
+                     if (kFloorClean === floorName) toRemove.push(amanText);
                  });
              });
              toRemove.forEach(txt => group.amanList.delete(txt));
         });
 
-        let rowsHtmlArray = []; // Simpan tiap baris HTML ke dalam array berdasarkan hari (Ascending)
+        let rowsHtmlArray = [];
 
         dayOrder.forEach(dateKey => {
             let group = groupedByDay[dateKey];
             let displayDate = dateKey; 
-            let timesArray = Array.from(group.times).sort(); 
-            let jamText = timesArray.join(' & '); 
-            let petugasText = Array.from(group.petugasSet).join(', '); 
             
-            let isStandby = group.latestPanel === "On Standby";
-            let badgeHtml = `<div class="panel-badge ${isStandby ? 'panel-on' : 'panel-off'}">PANEL UPDATE:<br>${group.latestPanel}</div>`;
+            let panelHtmlList = "";
+            if (group.panelLogs.length > 0) {
+                let uniquePanels = [];
+                let seen = new Set();
+                group.panelLogs.forEach(p => {
+                    let key = p.time + '|' + p.panel + '|' + p.petugas;
+                    if(!seen.has(key)) { seen.add(key); uniquePanels.push(p); }
+                });
+
+                uniquePanels.forEach(pObj => {
+                    let isStandby = pObj.panel.startsWith("On Standby");
+                    let badgeClass = isStandby ? 'panel-on' : 'panel-off';
+                    let pDisplay = pObj.panel.replace(/\[KET: (.*?)\]/, '<br><span style="font-size:9px; font-weight:normal;">ERR: $1</span>');
+                    let colorMain = isStandby ? '#065F46' : '#7F1D1D';
+                    let borderColor = isStandby ? 'rgba(52, 211, 153, 0.4)' : 'rgba(248, 113, 113, 0.4)';
+
+                    panelHtmlList += `
+                    <div class="panel-badge ${badgeClass}" style="display:block; text-align:center; width:100%;">
+                        ${pDisplay}
+                        <div style="margin-top:4px; padding-top:4px; border-top:1px solid ${borderColor}; font-size:9px; font-weight:600; color:${colorMain};">
+                            [${pObj.time || '-'}] ID:${pObj.petugas}
+                        </div>
+                    </div>`;
+                });
+            } else {
+                panelHtmlList = `<div class="panel-badge panel-on" style="display:block; text-align:center; width:100%;">SYSTEM NORMAL</div>`;
+            }
 
             let parsedHtml = "";
             let kendalaBlocks = "";
-            let amanBlocksHtml = "";
 
             if (group.kendalas.size > 0) {
                 group.kendalas.forEach(kData => {
@@ -798,104 +1039,122 @@
 
                     if (repair) {
                         kendalaBlocks += `
-                        <div class="kendala-item" style="border: 1px solid #10B981; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                            <div class="kendala-header" style="background: #ECFDF5; border-bottom: 1px solid #A7F3D0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                                <strong style="color: #065F46; font-size: 14px;">📍 ${kData.floor}</strong>
-                                <span style="font-size: 11px; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #A7F3D0; color: #065F46; font-weight: 600;">${kData.zoneRoom}</span>
+                        <div class="kendala-item" style="border: 1px solid #10B981; border-radius: 4px; overflow: hidden; margin-bottom: 6px;">
+                            <div class="kendala-header" style="background: #ECFDF5; border-bottom: 1px solid #A7F3D0; display: flex; justify-content: space-between; align-items: center; padding: 6px 8px;">
+                                <strong style="color: #065F46; font-size: 11px;">${kData.floor}</strong>
+                                <span style="font-size: 9px; background: white; padding: 2px 6px; border-radius: 2px; border: 1px solid #A7F3D0; color: #065F46; font-weight: 700;">${kData.zoneRoom}</span>
                             </div>
-                            <div class="kendala-body" style="background: white;">
-                                <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #E2E8F0;">
-                                    <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ Kendala Awal:</span><br>
-                                    <span style="color: #7F1D1D; font-size: 13px; text-decoration: line-through;">${kData.issueNote}</span>
+                            <div class="kendala-body" style="background: white; padding: 6px 8px;">
+                                <div style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #F1F5F9;">
+                                    <span style="color: #EF4444; font-size: 10px; font-weight: 700;">ERR:</span>
+                                    <span style="color: #7F1D1D; font-size: 11px; text-decoration: line-through;">${kData.issueNote}</span>
                                 </div>
                                 <div>
-                                    <span style="color: #10B981; font-size: 11px; font-weight: 700; text-transform: uppercase;">✔️ Diperbaiki:</span><br>
-                                    <span style="color: #065F46; font-size: 14px; font-weight: 600;">${repair.perbaikan}</span>
-                                    <div style="margin-top: 8px; font-size: 11px; color: #64748B; background: #F8FAFC; display: inline-block; padding: 4px 8px; border-radius: 4px; border: 1px solid #E2E8F0;">
-                                        Oleh <strong style="color: #0F172A;">${repair.petugas}</strong> (${repair.waktu})
-                                    </div>
+                                    <span style="color: #10B981; font-size: 10px; font-weight: 700;">FIX:</span>
+                                    <span style="color: #065F46; font-size: 11px; font-weight: 600;">${repair.perbaikan}</span>
+                                    <div style="font-size: 9px; color: #64748B; margin-top:2px;">[${repair.waktu}] ID:${repair.petugas}</div>
                                 </div>
                             </div>
                         </div>`;
                     } else if (bypass) {
                         kendalaBlocks += `
-                        <div class="kendala-item" style="border: 1px solid #F59E0B; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                            <div class="kendala-header" style="background: #FEF3C7; border-bottom: 1px solid #FDE68A; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                                <strong style="color: #92400E; font-size: 14px;">📍 ${kData.floor}</strong>
-                                <span style="font-size: 11px; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #FDE68A; color: #92400E; font-weight: 600;">${kData.zoneRoom}</span>
+                        <div class="kendala-item" style="border: 1px solid #F59E0B; border-radius: 4px; overflow: hidden; margin-bottom: 6px;">
+                            <div class="kendala-header" style="background: #FEF3C7; border-bottom: 1px solid #FDE68A; display: flex; justify-content: space-between; align-items: center; padding: 6px 8px;">
+                                <strong style="color: #92400E; font-size: 11px;">${kData.floor}</strong>
+                                <span style="font-size: 9px; background: white; padding: 2px 6px; border-radius: 2px; border: 1px solid #FDE68A; color: #92400E; font-weight: 700;">${kData.zoneRoom}</span>
                             </div>
-                            <div class="kendala-body" style="background: white;">
-                                <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #E2E8F0;">
-                                    <span style="color: #D97706; font-size: 11px; font-weight: 700; text-transform: uppercase;">🔧 BYPASS:</span><br>
-                                    <span style="color: #92400E; font-size: 13px; font-weight: 600;">${bypass.bypass}</span>
-                                    <div style="margin-top: 4px; font-size: 10px; color: #64748B;">
-                                        Diakali oleh <strong>${bypass.petugas}</strong> (${bypass.waktu})
-                                    </div>
+                            <div class="kendala-body" style="background: white; padding: 6px 8px;">
+                                <div style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #F1F5F9;">
+                                    <span style="color: #D97706; font-size: 10px; font-weight: 700;">BYPASS:</span>
+                                    <span style="color: #92400E; font-size: 11px; font-weight: 600;">${bypass.bypass}</span>
+                                    <div style="font-size: 9px; color: #64748B; margin-top:2px;">[${bypass.waktu}] ID:${bypass.petugas}</div>
                                 </div>
                                 <div>
-                                    <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ Awal:</span><br>
-                                    <span style="color: #EF4444; font-size: 12px;">${kData.issueNote}</span>
+                                    <span style="color: #EF4444; font-size: 10px; font-weight: 700;">ERR:</span>
+                                    <span style="color: #EF4444; font-size: 11px;">${kData.issueNote}</span>
                                 </div>
                             </div>
                         </div>`;
                     } else {
                         kendalaBlocks += `
-                        <div class="kendala-item" style="border: 1px solid #EF4444; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                            <div class="kendala-header" style="background: #FEF2F2; border-bottom: 1px solid #FECACA; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                                <strong style="color: #991B1B; font-size: 14px;">📍 ${kData.floor}</strong>
-                                <span style="font-size: 11px; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #FECACA; color: #991B1B; font-weight: 600;">${kData.zoneRoom}</span>
+                        <div class="kendala-item" style="border: 1px solid #EF4444; border-radius: 4px; overflow: hidden; margin-bottom: 6px;">
+                            <div class="kendala-header" style="background: #FEF2F2; border-bottom: 1px solid #FECACA; display: flex; justify-content: space-between; align-items: center; padding: 6px 8px;">
+                                <strong style="color: #991B1B; font-size: 11px;">${kData.floor}</strong>
+                                <span style="font-size: 9px; background: white; padding: 2px 6px; border-radius: 2px; border: 1px solid #FECACA; color: #991B1B; font-weight: 700;">${kData.zoneRoom}</span>
                             </div>
-                            <div class="kendala-body" style="background: white;">
-                                <span style="color: #EF4444; font-size: 11px; font-weight: 700; text-transform: uppercase;">⚠️ KENDALA:</span><br>
-                                <span style="color: #7F1D1D; font-size: 13px; font-weight: 600;">${kData.issueNote}</span>
+                            <div class="kendala-body" style="background: white; padding: 6px 8px;">
+                                <span style="color: #EF4444; font-size: 10px; font-weight: 700;">ERR:</span>
+                                <span style="color: #7F1D1D; font-size: 11px; font-weight: 600;">${kData.issueNote}</span>
+                                <div style="font-size: 9px; color: #991B1B; margin-top:2px;">[${kData.waktuAwal}] ID:${kData.petugasAwal}</div>
                             </div>
                         </div>`;
                     }
                 });
+            }
 
-                Array.from(group.amanList).forEach(amanText => {
-                    amanBlocksHtml += `<span style="display:inline-block; margin: 3px; padding: 4px 8px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 4px; font-size: 11px; color: #64748B;">${amanText}</span>`;
-                });
+            let sortedAmanList = Array.from(group.amanList).sort((a, b) => {
+                let floorA = a.split(':')[0].trim();
+                let floorB = b.split(':')[0].trim();
+                let orderA = Object.keys(activeRsData).indexOf(floorA);
+                let orderB = Object.keys(activeRsData).indexOf(floorB);
+                return (orderA !== -1 && orderB !== -1) ? orderA - orderB : 0;
+            });
 
+            let amanBlocksHtml = "<div style='display: flex; flex-wrap: wrap; gap: 4px;'>";
+            sortedAmanList.forEach(amanText => {
+                let floorName = amanText.split(':')[0].trim();
+                amanBlocksHtml += `
+                <div class="aman-badge-ringkas" style="padding: 2px 6px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 2px; font-size: 10px; color: #334155; display: inline-flex; align-items: center; gap: 4px;">
+                    <strong>${floorName}</strong> <span style="color:#10B981">✓</span>
+                </div>`;
+            });
+            amanBlocksHtml += "</div>";
+
+            if (group.kendalas.size > 0) {
                 parsedHtml = kendalaBlocks + `
                 <div style="margin-top: 8px;">
-                    <details class="no-print">
-                        <summary style="font-size: 12px; color: #00A859; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: var(--brand-light); border-radius: 4px;">
-                            👁️ Tampilkan Lantai Lain Yang Aman
-                        </summary>
-                        <div style="margin-top: 10px; display: flex; flex-wrap: wrap;">${amanBlocksHtml}</div>
-                    </details>
-                    
-                    <div class="print-only" style="flex-wrap: wrap; gap: 4px;">
-                        <div style="width: 100%; font-size: 10px; font-weight: 700; color: #075E33; margin-bottom: 2px;">✔️ Lantai Lain Aman:</div>
-                        ${amanBlocksHtml}
-                    </div>
+                    <div style="font-size: 10px; font-weight: 700; color: #64748B; margin-bottom: 4px; text-transform:uppercase;">NORMAL ZONES:</div>
+                    ${amanBlocksHtml}
                 </div>`;
             } else {
                 parsedHtml = `
-                <div class="aman-box" style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 6px; text-align: center; padding: 12px; box-shadow: var(--shadow-sm);">
-                    <span style="color: #059669; font-weight: 600; font-size: 13px;">✔️ Seluruh Pengecekan Terpantau AMAN</span>
+                <div style="margin-bottom: 4px;">
+                    <div style="font-size: 10px; font-weight: 700; color: #64748B; margin-bottom: 4px; text-transform:uppercase;">ALL ZONES NORMAL:</div>
+                    ${amanBlocksHtml}
                 </div>`;
             }
 
-            let fotoHtml = '<span style="color:var(--text-muted); font-size:12px;">-</span>';
+            if (group.catatans.length > 0) {
+                let catText = group.catatans.map(c => `- ${c}`).join('<br>');
+                let catatanBlocksHtml = `
+                <div style="margin-top: 10px; padding: 8px; background: #F1F5F9; border-left: 3px solid #3B82F6; font-size: 11px;">
+                    <strong style="color: #1E293B; display: block;">NOTES:</strong>
+                    <span style="color: #475569;">${catText}</span>
+                </div>`;
+                parsedHtml += catatanBlocksHtml;
+            }
+
+            let fotoHtml = '<span style="color:#94A3B8; font-size:10px;">-</span>';
             if (group.photos.length > 0) {
-                fotoHtml = `<div style="display:flex; flex-direction:column; gap:4px; align-items:center;">` + 
+                fotoHtml = `<div style="display:flex; flex-direction:column; gap:6px; align-items:center;">` + 
                            group.photos.map(src => `<img src="${src}" class="thumb" onclick="openPhotoModal('${src}')">`).join('') + 
                            `</div>`;
             }
 
             let rowHtml = `
                 <tr>
-                    <td style="background: #F8FAFC; border-right: 1px solid var(--border-color); vertical-align: middle;">
-                        ${badgeHtml}
-                        <div class="info-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 8px;">TANGGAL:</div>
-                        <div class="info-val" style="font-size: 14px; font-weight: 700; color: var(--text-main);">${displayDate}</div>
-                        <div class="info-val" style="font-size: 11px; font-weight: 600; color: var(--warning); margin-bottom: 8px;">🕒 Jam: ${jamText}</div>
-                        <div class="info-label" style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">PETUGAS:</div>
-                        <div class="info-val" style="font-size: 12px; font-weight: 700; color: var(--brand-green);">👤 ${petugasText}</div>
+                    <td style="background: #F8FAFC; border-right: 1px solid #E2E8F0; vertical-align: top;">
+                        <div class="print-row-container">
+                            <div class="print-date-card">
+                                <div style="font-size: 9px; color: #64748B; font-weight: 700; text-transform: uppercase;">DATE</div>
+                                <div style="font-size: 12px; font-weight: 700; color: #0F172A; margin-top: 2px;">${displayDate}</div>
+                            </div>
+                            <div class="print-panel-card">
+                                ${panelHtmlList}
+                            </div>
+                        </div>
                     </td>
-                    <td style="background: #FAFAFA;">
+                    <td style="background: #FFFFFF;">
                         ${parsedHtml}
                     </td>
                     <td style="text-align:center; vertical-align: middle;">
@@ -906,10 +1165,7 @@
             rowsHtmlArray.push(rowHtml);
         });
 
-        // MASUKKAN DATA KE WADAH CETAK (Urutan Ascending / dari kecil ke besar)
         tbodyPrint.innerHTML = rowsHtmlArray.join('');
-
-        // MASUKKAN DATA KE WADAH TAMPILAN LAYAR (Di-reverse agar terbaru di atas / Descending)
         tbodyUI.innerHTML = [...rowsHtmlArray].reverse().join('');
     }
 
@@ -933,12 +1189,12 @@
                 alert(successMessage);
                 fetchDataFromSheets(); 
             } else {
-                alert("Gagal menyimpan ke Sheet: " + data.message);
+                alert("SYSTEM ERROR: " + data.message);
             }
         })
         .catch(err => {
             document.getElementById('loadingOverlay').style.display = 'none';
-            alert("Error jaringan saat mengirim ke server.");
+            alert("CONNECTION TIMEOUT.");
             console.error(err);
         });
     }
@@ -949,39 +1205,57 @@
         const waktuVal = document.getElementById('waktuCheck').value.replace('T', ' ');
         const petugasVal = document.getElementById('namaPetugas').value;
         const panelVal = document.querySelector('input[name="panel_status"]:checked').value;
+        const panelNoteVal = document.getElementById('panelNoteText').value.trim();
+        const catatanVal = document.getElementById('catatanTambahan').value.trim();
         
-        let stringForGoogleSheet = `[PANEL: ${panelVal.toUpperCase()}]\n`; 
+        let panelString = panelVal.toUpperCase();
+        if (panelVal === "Off" && panelNoteVal !== "") {
+            panelString += ` [KET: ${panelNoteVal}]`;
+        }
+        
+        let stringForGoogleSheet = `[PANEL: ${panelString}]\n`; 
 
         try {
-            Object.keys(rsData).forEach((floor, idx) => {
+            Object.keys(activeRsData).forEach((floor, idx) => {
                 const statusVal = document.querySelector(`input[name="status_${idx}"]:checked`).value;
                 if (statusVal === "Kendala") {
                     const zVal = document.getElementById(`zone_select_${idx}`).value;
                     const rVal = document.getElementById(`room_select_${idx}`).value;
-                    const kVal = document.getElementById(`ket_text_${idx}`).value;
+                    const kVal = document.getElementById(`ket_text_${idx}`)[value];
                     if (zVal && rVal && kVal) {
-                        stringForGoogleSheet += `• ${floor}: ${zVal} (${rVal}) - [KENDALA] ${kVal}\n`;
+                        stringForGoogleSheet += `• ${currentGedung} ${floor}: ${zVal} (${rVal}) - [KENDALA] ${kVal}\n`;
                     }
                 } else {
-                    stringForGoogleSheet += `• ${floor}: AMAN\n`;
+                    stringForGoogleSheet += `• ${currentGedung} ${floor}: AMAN\n`;
                 }
             });
 
+            if (catatanVal !== "") {
+                stringForGoogleSheet += `\n[CATATAN TAMBAHAN]: ${catatanVal}\n`;
+            }
+
             const payload = {
-                waktu: waktuVal, petugas: petugasVal, panel: panelVal, laporan: stringForGoogleSheet.trim(), foto: currentPhotoBase64
+                waktu: waktuVal, 
+                petugas: petugasVal, 
+                panel: panelString, 
+                laporan: stringForGoogleSheet.trim(), 
+                foto: currentPhotoBase64,
+                gedung: currentGedung
             };
 
-            submitDataToServer(payload, "Laporan berhasil disimpan ke database Google Sheets!");
+            submitDataToServer(payload, "LOG SAVED SUCCESSFULLY.");
             
             document.getElementById('inspectionForm').reset();
             setDefaultTime();
+            togglePanelNote(false);
             renderFloorForm();
             currentPhotoBase64 = "";
-            document.getElementById('infoKamera').innerText = "Belum ada foto";
-            document.getElementById('infoGaleri').innerText = "Belum ada foto";
+            document.getElementById('infoKamera').innerText = "NO MEDIA";
+            document.getElementById('infoGaleri').innerText = "NO MEDIA";
+            document.getElementById('catatanTambahan').value = ""; 
         } catch (error) {
             console.error(error);
-            alert("Terjadi kesalahan sistem saat memproses form.");
+            alert("SYSTEM ERROR DURING PROCESSING.");
         }
     });
 
