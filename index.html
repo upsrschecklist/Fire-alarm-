@@ -703,21 +703,21 @@
         const container = document.getElementById('pendingAlertContainer');
         if (pendingIssues.length === 0) { container.innerHTML = ''; return; }
 
-        let html = `<div class="pending-alert-box"><h4>⚠️ WARNING: UNRESOLVED HARDWARE ISSUES</h4>`;
+        let html = `<div class="pending-alert-box"><h4>⚠️ WARNING: MASALAH YANG AKTIF</h4>`;
         pendingIssues.forEach((issue, index) => {
             let isBypass = issue.isBypass === true;
             let bgStyle = isBypass ? "background: #FEF9C3; border-left: 3px solid #F59E0B;" : "background: white;";
             let textColor = isBypass ? "#B45309" : "var(--led-red)";
-            let statusText = isBypass ? `[BYPASSED] : ${issue.bypassNote}` : `[TROUBLE] ${issue.note}`;
+            let statusText = isBypass ? `[penaggulangan sementara] : ${issue.bypassNote}` : `[TROUBLE] ${issue.note}`;
 
             let formattedWaktu = formatDateTimeClean(issue.waktuAwal);
             let durasi = hitungDurasi(issue.waktuAwal);
             let badgeDurasi = durasi ? ` <span style="background:#E2E8F0; padding:2px 6px; border-radius:4px; font-size:10px; color:#475569; display:inline-block; margin-left:4px;">🕒 ${durasi}</span>` : '';
-            let tanggalInfo = issue.waktuAwal ? `<div style="font-size:11px; color:#64748B; margin-top:4px; margin-bottom:4px;">Log date: <strong>${formattedWaktu}</strong>${badgeDurasi}</div>` : '';
+            let tanggalInfo = issue.waktuAwal ? `<div style="font-size:11px; color:#64748B; margin-top:4px; margin-bottom:4px;">Waktu Kejadian: <strong>${formattedWaktu}</strong>${badgeDurasi}</div>` : '';
 
             let bypassTimeInfo = '';
             if (isBypass && issue.bypassTime) {
-                bypassTimeInfo = `<div style="font-size:11px; color:#B45309; margin-top:2px;">Bypassed at: <strong>${formatDateTimeClean(issue.bypassTime)}</strong></div>`;
+                bypassTimeInfo = `<div style="font-size:11px; color:#B45309; margin-top:2px;">Waktu Penaggulangan: <strong>${formatDateTimeClean(issue.bypassTime)}</strong></div>`;
             }
 
             html += `<div class="pending-item" style="${bgStyle}">
@@ -726,11 +726,11 @@
                     ${tanggalInfo}
                     <div style="color:${textColor}; font-size:12px; font-weight:700; margin-top:2px;">${statusText}</div>
                     ${bypassTimeInfo}
-                    ${isBypass ? `<div style="font-size:11px; color:#94A3B8; margin-top:4px;">(Original Issue: ${issue.note})</div>` : ''}
+                    ${isBypass ? `<div style="font-size:11px; color:#94A3B8; margin-top:4px;">(Kendala: ${issue.note})</div>` : ''}
                 </div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
-                    ${!isBypass ? `<button type="button" style="background:#F59E0B; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:10px; font-weight:600; text-transform:uppercase;" onclick="bypassIssue(${index})">🔧 Set Bypass</button>` : ''}
-                    <button type="button" class="btn-resolve" onclick="resolveIssue(${index})">✔ Set Resolved</button>
+                    ${!isBypass ? `<button type="button" style="background:#F59E0B; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:10px; font-weight:600; text-transform:uppercase;" onclick="bypassIssue(${index})">🔧 penaggulangan sementara</button>` : ''}
+                    <button type="button" class="btn-resolve" onclick="resolveIssue(${index})">✔ penaggulangan selesai</button>
                 </div>
             </div>`;
         });
